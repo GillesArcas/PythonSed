@@ -1,0 +1,100 @@
+Scripts from The sed $HOME (http://sed.sourceforge.net/)
+
+expand.sed: 
+line 15: \a replaced by BEL control character.
+
+impossible.sed:
+^A and ^I replaced by corresponding control characters. Line breaks in
+s commands are removed as not handled by GNU sed nor sed.py. Should have
+been replaced by "\n" but in that case the script falls into an infinite
+loop.
+
+toupper.sed:
+added
+
+Credits and status
+------------------
+Credits given if script stored in test suite.
+
+add_decs               Paolo Bonzini            tested
+anagrams               Paolo Bonzini            tested
+bf2c                   Graham Bell              tested
+brainf__k              Edward Rosten            tested (hello word example from wikipedia)
+bre2ere                Laurent Vogel            tested
+cal.sh                                          ignored, shell script
+caesar                 Batalov Sergey           tested
+cal-year.sh                                     ignored, shell script
+cat-b                  Paolo Bonzini            tested
+cat-b.sh                                        ignored, shell script
+cat-n                  Paolo Bonzini            tested
+cat-n.sh                                        ignored, shell script
+cat-s                  Carlos Jorge G. Duarte   tested
+centre_1               Paolo Bonzini            tested
+centre_2               Paolo Bonzini            tested
+cflword1               Paolo Bonzini            tested
+cflword2               Paolo Bonzini            tested
+cflword3               Carlos Jorge G. Duarte   tested
+cflword4               Carlos Jorge G. Duarte   tested
+cflword5               Carlos Jorge G. Duarte   tested
+cgrep.sh                                        ignored, shell script
+commify1               Paolo Bonzini            tested
+commify2               Paolo Bonzini            tested
+commify3                                        ignored, buggy
+commify3fix                                     tested, proposed fix
+commify4                                        tested, added alternative
+config                 Nathan D. Ryan           tested
+crlf.tar.gz                                     ignored, does not work as expected under windows
+dc                     Greg Ubben               tested
+diffhtml               Tilmann Bitterberg       tested
+dtree.sh                                        ignored, shell script
+expand                 Greg Ubben               tested
+fbasename              Carlos Jorge G. Duarte   tested
+fdirname               Carlos Jorge G. Duarte   tested
+fmt                    Carlos Jorge G. Duarte   tested
+get_html_title         Casper Boden-Cummins     tested
+hbanner                                         ignored, shell script
+head                   Paolo Bonzini            tested
+html2iso               Paolo Bonzini            tested
+html_lc                Paolo Bonzini            tested
+html_uc                Paolo Bonzini            tested
+impossible             Greg Ubben               tested
+incr_num               Bruno Haible             tested
+indentls               Paolo Bonzini            ignored, test case not available
+indexer                Eric Pement              tested
+indexhtml              Tilmann Bitterberg       tested
+iso2html               Paolo Bonzini            tested
+italbold               Eric Pement              tested
+joinfile               Paolo Bonzini            tested
+justify                Aurelio Jargas           tested
+list_urls              Paolo Bonzini            tested
+mail-iso2txt           Aurelio Jargas           tested, \xnn not handled in sed.py
+maketarg               Carlos Jorge G. Duarte   tested
+masm2gas               Louis J. LaBash Jr.      tested
+overstrk               ecbyahoo                 tested
+palindrome             Laurent Le Brun          tested
+pine_addr_2_vim_ab                              ignored, test case not available 
+polish.html                                     ignored, complex set of scripts
+remccoms1              Paolo Bonzini            tested
+remccoms2.sh                                    ignored, shell script
+remccoms3              Brian Hiles              tested
+revchr_1               Paolo Bonzini            tested
+revchr_2               Paolo Bonzini            tested
+revlines               Paolo Bonzini            tested
+rot13                  Paolo Bonzini            tested
+sedhttpd                                        ignored, test case not available
+sm                                              ignored, test case not available
+sodelnum               Paolo Bonzini            tested
+splitdig                                        ignored, test case not available
+strip_html_comments    Stewart Ravenhall        tested
+subwords                                        ignored, shell script
+tex2xml                Tilmann Bitterberg       tested
+tolower2                                        ignored, shell script
+tolower                Paolo Bonzini            tested
+toupper2                                        ignored, shell script
+toupper                                         tested
+turing                 Christophe Blaess        tested
+txt2html               Paolo Bonzini            tested
+undblspc               Sed One-liners Document  tested
+unlambda               Laurent Vogel            tested
+untroff                                         ignored, test case not available
+yahoogroups-kill-sig   Aurelio Jargas           tested

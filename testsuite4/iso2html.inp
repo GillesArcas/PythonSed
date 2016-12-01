@@ -1,0 +1,107 @@
+double quotation mark           &#34;           &quot;
+ampersand                       &#38;           &amp;
+slash                           &#47;           &frasl;
+less-than sign                  &#60;           &lt;
+greater-than sign               &#62;           &gt;
+ellipses                        &#133;          &hellip;
+en dash                         &#150;          &ndash;
+em dash                         &#151;          &mdash;
+nonbreaking space                           
+inverted exclamation            ¡          ¡
+cent sign                       ¢          ¢
+pound sterling                  £          £
+general currency sign           ¤          ¤
+yen sign                        ¥          ¥
+broken vertical bar             ¦          ¦
+broken vertical bar             ¦          &brkbar;
+section sign                    §          §
+umlaut                          ¨          ¨
+umlaut                          ¨          &die;
+copyright                       ©          ©
+feminine ordinal                ª          ª
+left angle quote                «          «
+not sign                        ¬          ¬
+soft hyphen                     ­          ­
+registered trademark            ®          ®
+macron accent                   ¯          ¯
+macron accent                   ¯          &hibar;
+degree sign                     °          °
+plus or minus                   ±          ±
+superscript two                 ²          ²
+superscript three               ³          ³
+acute accent                    ´          ´
+micro sign                      µ          µ
+paragraph sign                  ¶          ¶
+middle dot                      ·          ·
+cedilla                         ¸          ¸
+superscript one                 ¹          ¹
+masculine ordinal               º          º
+right angle quote               »          »
+one-fourth                      ¼          ¼
+one-half                        ½          ½
+three-fourths                   ¾          ¾
+inverted question mark          ¿          ¿
+uppercase A, grave accent       À          À
+uppercase A, acute accent       Á          Á
+uppercase A, circumflex accent  Â          Â
+uppercase A, tilde              Ã          Ã
+uppercase A, umlaut             Ä          Ä
+uppercase A, ring               Å          Å
+uppercase AE                    Æ          Æ
+uppercase C, cedilla            Ç          Ç
+uppercase E, grave accent       È          È
+uppercase E, acute accent       É          É
+uppercase E, circumflex accent  Ê          Ê
+uppercase E, umlaut             Ë          Ë
+uppercase I, grave accent       Ì          Ì
+uppercase I, acute accent       Í          Í
+uppercase I, circumflex accent  Î          Î
+uppercase I, umlaut             Ï          Ï
+uppercase Eth, Icelandic        Ð          Ð
+uppercase N, tilde              Ñ          Ñ
+uppercase O, grave accent       Ò          Ò
+uppercase O, acute accent       Ó          Ó
+uppercase O, circumflex accent  Ô          Ô
+uppercase O, tilde              Õ          Õ
+uppercase O, umlaut             Ö          Ö
+multiplication sign             ×          ×
+uppercase O, slash              Ø          Ø
+uppercase U, grave accent       Ù          Ù
+uppercase U, acute accent       Ú          Ú
+uppercase U, circumflex accent  Û          Û
+uppercase U, umlaut             Ü          Ü
+uppercase Y, acute accent       Ý          Ý
+uppercase THORN, Icelandic      Þ          Þ
+lowercase sharps, German        ß          ß
+lowercase a, grave accent       à          à
+lowercase a, acute accent       á          á
+lowercase a, circumflex accent  â          â
+lowercase a, tilde              ã          ã
+lowercase a, umlaut             ä          ä
+lowercase a, ring               å          å
+lowercase ae                    æ          æ
+lowercase c, cedilla            ç          ç
+lowercase e, grave accent       è          è
+lowercase e, acute accent       é          é
+lowercase e, circumflex accent  ê          ê
+lowercase e, umlaut             ë          ë
+lowercase i, grave accent       ì          ì
+lowercase i, acute accent       í          í
+lowercase i, circumflex accent  î          î
+lowercase i, umlaut             ï          ï
+lowercase eth, Icelandic        ð          ð
+lowercase n, tilde              ñ          ñ
+lowercase o, grave accent       ò          ò
+lowercase o, acute accent       ó          ó
+lowercase o, circumflex accent  ô          ô
+lowercase o, tilde              õ          õ
+lowercase o, umlaut             ö          ö
+division sign                   ÷          ÷
+lowercase o, slash              ø          ø
+lowercase u, grave accent       ù          ù
+lowercase u, acute accent       ú          ú
+lowercase u, circumflex accent  û          û
+lowercase u, umlaut             ü          ü
+lowercase y, acute accent       ý          ý
+lowercase thorn, Icelandic      þ          þ
+lowercase y, umlaut             ÿ          ÿ

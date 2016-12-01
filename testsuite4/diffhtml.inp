@@ -1,0 +1,409 @@
+--- \Gilles\sed\sed.py	Sat Sep 20 18:54:58 2014
++++ \Gilles\sed\sed-161.py	Wed Sep 10 20:45:41 2014
+@@ -58,7 +58,7 @@
+         self.output = None
+         self.output_lines = []
+         self.no_autoprint = False
+-        self.regexp_extended = False
++        self.regexp_extended  = False
+         self.subst_successful = False
+         self.append_buffer = []
+         self.last_regexp = None
+@@ -86,27 +86,22 @@
+ 
+     def create_write_files(self):
+         for command in self.commands:
+-            filename = None
+             if command.function == 'w':
+-                filename = command.args
++                open(command.args, 'w')
+             elif command.function == 's':
+                 write = command.args[5]
++                filename = command.args[6]
+                 if write:
+-                    filename = command.args[6]
+-            if filename:
+-                try:
+                     open(filename, 'w')
+-                except IOError:
+-                    raise SedException('unable to open %s' % filename)
+ 
+     def parse_flags(self, script):
+         # match #n on first line, handle #r extension
+         if script:
+-            m = re.match('#([rn]{,2})(\s*)($|\b)', script[0])
++            m = re.match('#([rn]{,2})($|\b)', script[0])
+             if m:
+                 # combine flags with possible values set before reading
+                 self.no_autoprint = self.no_autoprint or 'n' in m.group(1)
+-                self.regexp_extended = self.regexp_extended or 'r' in m.group(1)
++                self.regexp_extended = self.regexp_extended  or 'r' in m.group(1)
+ 
+     def convert(self):
+         for command in self.commands:
+@@ -257,8 +252,6 @@
+ 
+         if function == ':' and address1:
+             raise SedException('wrong number of addresses')
+-        if function == '}' and address1:
+-            raise SedException('wrong number of addresses')
+         if function == 'q' and address2:
+             raise SedException('wrong number of addresses')
+ 
+@@ -267,15 +260,16 @@
+ 
+         self.address1 = address1
+         self.address2 = address2
+-        self.negate = negate
++        self.negate   = negate
+         self.function = function
+-        self.args = None
+-        self.next = None
+-        self.branch = None
++        self.args     = None
++        self.next     = None
++        self.branch   = None
+         self.address_range_started = False
+ 
+-    @staticmethod
+-    def factory(address1, address2, negate, function):
++    @classmethod
++    def factory(clss, address1, address2, negate, function):
++        # TODO: clss pas utilise
+         classes = { '{': Command_block,
+                     '}': Command_block_end,
+                     ':': Command_label,
+@@ -309,28 +303,34 @@
+             raise SedException('unknown function: %s' % function)
+ 
+     def __str__(self):
++        return 'N:%03d, X:%03d, B:%03d, a1:%s, a2:%s, n:%s, f:%s, a:%s' % (self.num,
++                                            self.next.num if self.next else 0,
++                                            self.branch.num if self.branch else 0,
++                                            self.address1, self.address2,
++                                            '!' if self.negate else '+',
++                                            self.function,
++                                            self.args)
++    def __str__(self):
++        # TODO: finaliser
++        if self.function == 's':
++            regexp, repl, count, printit, ignore_case, write, filename = self.args
++            args = '%-20s|%-20s|%s%s%s%s' % (regexp, repl,
++                                             count if count else '',
++                                             'p' if printit else '',
++                                             'i' if ignore_case else '',
++                                             'w' if write else '')
++            if filename:
++                args += ' ' + filename
++        else:
++            args = self.args
++
+         return '|%03d|%03d|%03d|%-10s|%-10s|%1s|%1s|%-20s|' % (self.num,
+                                             self.next.num if self.next else 0,
+                                             self.branch.num if self.branch else 0,
+                                             self.address1, self.address2,
+                                             '!' if self.negate else ' ',
+                                             self.function,
+-                                            self.str_arguments())
+-
+-    def allow_arguments(self):
+-        return self.function in ':btaicwrsy'
+-
+-    def str_arguments(self):
+-        return self.args
+-
+-    def parse_arguments(self, line, i):
+-        i, args = parse_arguments(line, i)
+-        self.args = args
+-
+-        if self.args and not self.allow_arguments():
+-            raise SedException('arguments not allowed: %s %s' % (self.function, self.args))
+-        else:
+-            return i
++                                            args)
+ 
+     def convert(self, regexp_extended):
+         if self.address1:
+@@ -338,6 +338,14 @@
+         if self.address2:
+             self.address2.convert(regexp_extended)
+ 
++        if self.function == 's':
++            self.args[0] = convert_regexp(self.args[0], regexp_extended)
++            self.args[1] = convert_replacement(self.args[1])
++
++        if self.function == 'y':
++            self.args[0] = convert_argument_y(self.args[0])
++            self.args[1] = convert_argument_y(self.args[1])
++
+     def apply_func(self, sed):
+         if self.address1 is None:
+             return self.apply_0addr(sed)
+@@ -382,18 +390,12 @@
+ 
+ 
+ class Command_block(Command):
+-    def parse_arguments(self, line, i):
+-        return i
+-
+     def apply(self, sed):
+         # self.next is the first instruction after block
+         # self.branch is the first instruction within block
+         return self.branch
+ 
+ class Command_block_end(Command):
+-    def parse_arguments(self, line, i):
+-        return i
+-
+     def apply(self, sed):
+         return self.next
+ 
+@@ -537,41 +539,6 @@
+         return self.next
+ 
+ class Command_s(Command):
+-    def parse_arguments(self, line, i):
+-        i, args = parse_arguments_s(line, i)
+-        self.args = args
+-        return i
+-
+-    def convert(self, regexp_extended):
+-        Command.convert(self, regexp_extended)
+-        self.args[0] = convert_regexp(self.args[0], regexp_extended)
+-        self.args[1] = convert_replacement(self.args[1])
+-
+-    def str_arguments(self):
+-        regexp, repl, count, printit, ignore_case, write, filename = self.args
+-
+-        # try to alight right delimiter by reducing repl width if necessary
+-        l0 = max(20, len(regexp)) + max(20, len(repl))
+-        if l0 <= 40:
+-            l = 20
+-        else:
+-            l = max(1, 20 - (l0 - 40))
+-
+-        # count is 0 for g flag, flag removed if count = 1
+-        countflag = 'g' if count == 0 else count if count > 1 else ''
+-
+-        flags = '%s%s%s%s' % (countflag,
+-                              'p' if printit else '',
+-                              'i' if ignore_case else '',
+-                              'w' if write else '')
+-
+-        args = '%-20s|%-*s|%1s' % (regexp, l, repl, flags)
+-
+-        if filename:
+-            args += ' ' + filename
+-
+-        return args
+-
+     def apply(self, sed):
+         regexp, repl, count, printit, ignore_case, write, filename = self.args
+ 
+@@ -617,20 +584,6 @@
+         return self.next
+ 
+ class Command_y(Command):
+-    def parse_arguments(self, line, i):
+-        i, args = parse_arguments_y(line, i)
+-        self.args = args
+-        return i
+-
+-    def convert(self, regexp_extended):
+-        Command.convert(self, regexp_extended)
+-        self.args[0] = convert_argument_y(self.args[0])
+-        self.args[1] = convert_argument_y(self.args[1])
+-
+-    def str_arguments(self):
+-        source_chars, dest_chars = self.args
+-        return '%-20s|%-20s' % (source_chars, dest_chars)
+-
+     def apply(self, sed):
+         try:
+             translate = string.maketrans(*self.args)
+@@ -748,7 +701,14 @@
+ 
+     command = Command.factory(address1, address2, negate, function)
+ 
+-    i = command.parse_arguments(line, i)
++    if command.function in '{}':
++        pass
++    elif command.function == 's':
++        i = parse_arguments_s(line, i, command)
++    elif command.function == 'y':
++        i = parse_arguments_y(line, i, command)
++    else:
++        i = parse_arguments(line, i, command)
+ 
+     return i, command
+ 
+@@ -815,6 +775,22 @@
+         return i, AddressRegexp(regexp, ignore_case)
+ 
+ def parse_function(line, i):
++    FUNC = 'abcdsyirw:tqpl=nhHgGxNPD{}'
++
++    i, char = ignore_space(line, i)
++
++    if i >= len(line):
++        return len(line), None
++    elif line[i] in FUNC:
++        return i + 1, line[i]
++    elif line[i] == '#':
++        return len(line), None
++    elif line[i] == ';':
++        return i + 1, None
++    else:
++        raise SedException('unknown function: %s' % line[i])
++
++def parse_function(line, i):
+ 
+     i, char = ignore_space(line, i)
+ 
+@@ -825,14 +801,15 @@
+     else:
+         return i + 1, line[i]
+ 
+-def parse_arguments(line, i):
++def parse_arguments(line, i, command):
+     # spaces after function are ignored (s and y treated apart)
+     i, char = ignore_space(line, i)
+     i, tail = parse_tail_of_command(line, i)
+-    return i, tail
++    command.args = tail
++    return i
+ 
+-def parse_arguments_s(line, i):
+-    i, left = parse_regexp(line, i)
++def parse_arguments_s(line, i, command):
++    i, left  = parse_regexp(line, i)
+     i, right = parse_replacement(line, i, delim=line[i - 1])
+ 
+     i, flags = parse_tail_of_command(line, i)
+@@ -861,9 +838,10 @@
+         write = True
+         filename = g4.strip()
+ 
+-    return i, [left, right, count, printit, ignore_case, write, filename]
++    command.args = [left, right, count, printit, ignore_case, write, filename]
++    return i
+ 
+-def parse_arguments_y(line, i):
++def parse_arguments_y(line, i, command):
+     if not line:
+         raise SedException('y: unterminated command')
+ 
+@@ -872,11 +850,13 @@
+     i, left = parse_argument_y(line, i, sep)
+     i, right = parse_argument_y(line, i, sep)
+ 
++    command.args = [left, right]
++
+     i, tail = parse_tail_of_command(line, i)
+     if tail.strip():
+         raise SedException('y: extra characters after command')
+ 
+-    return i, [left, right]
++    return i
+ 
+ def parse_argument_y(line, i, sep):
+     # enter with i on first character after separator
+@@ -898,7 +878,7 @@
+     # return index of first char after tail plus tail string
+ 
+     j = i
+-    while j < len(line) and line[j] not in ';}#':
++    while j < len(line) and line[j] not in ';}':
+         j += 1
+ 
+     tail = line[i:j].rstrip()
+@@ -909,8 +889,6 @@
+         return j, tail
+     elif line[j] == ';':
+         return j + 1, tail
+-    elif line[j] == '#':
+-        return len(line), tail
+ 
+ def parse_number(line, i):
+     m = re.match('([0-9]+)', line[i:])
+@@ -1028,19 +1006,12 @@
+         elif regexp[i] == '[':
+             i, s = convert_charset(regexp, i)
+             r += s
+-        elif regexp[i] == '^' and i > 0 and regexp[i-1] not in '(|':
++        elif regexp[i] == '^' and i > 0:
+             r += r'\^'
+             i += 1
+-        elif regexp[i] == '$' and i < len(regexp) - 1 and regexp[i+1] not in '|)':
++        elif regexp[i] == '$' and i < len(regexp) - 1:
+             r += r'\$'
+             i += 1
+-        elif regexp[i] == '$':
+-            # see http://www.regular-expressions.info/anchors.html#realend
+-            # without converting $ to \Z, re finds a end of line before end of
+-            # string and before a terminating \n :
+-            # re.sub('$', 'X', '\n') --> 'X\nX'
+-            r += r'\Z'
+-            i += 1
+         elif regexp[i] in '+*?}':
+             if i + 1 < len(regexp) and regexp[i + 1] in '+*?{':
+                 raise SedException('regexp: multiple quantifier')
+@@ -1121,13 +1092,9 @@
+     i = 0
+     while i < len(repl):
+         if repl[i] == '\\' and i + 1 < len(repl) and repl[i + 1] in '0123456789':
+-            if i + 2 < len(repl) and repl[i + 2] in '0123456789':
+-                # force one digit backreference (\20)
+-                r += '\\g<' + repl[i + 1] + '>'
+-                i += 2
+-            else:
+-                r += repl[i:i + 2]
+-                i += 2
++            # force one digit backreference (\20)
++            r += '\\g<' + repl[i + 1] + '>'
++            i += 2
+         elif repl[i] == '\\' and i + 1 < len(repl) and repl[i + 1] in '&':
+             r += repl[i + 1]
+             i += 2
+@@ -1214,8 +1181,8 @@
+ 
+ 
+ USAGE = """
+-sed.py [-n][-r] -f <file> <text file>
+-       [-n][-r] -e <string> <text file>
++sed.py [-n][-r][-d] -f <file> <text file>
++       [-n][-r][-d] -e <string> <text file>
+ """
+ 
+ def parse_command_line():
+@@ -1225,11 +1192,10 @@
+     parser.add_argument("-e", help="script in string", action="store", dest="script_string", metavar='string')
+     parser.add_argument("-n", help="print only if requested", action="store_true", dest="no_autoprint")
+     parser.add_argument("-r", help="regexp extended", action="store_true", dest="regexp_extended")
+-    parser.add_argument("-d", help=argparse.SUPPRESS, action="store_true", dest="dump_script")
++    parser.add_argument("-d", help="dump script", action="store_true", dest="dump_script")
+     parser.add_argument("target", help=argparse.SUPPRESS)
+ 
+-    args = parser.parse_args()
+-    return parser, args
++    return parser, parser.parse_args()
+ 
+ def main():
+     parser, args = parse_command_line()
+@@ -1237,14 +1203,14 @@
+     try:
+         sed = Sed()
+         sed.no_autoprint = args.no_autoprint
+-        sed.regexp_extended = args.regexp_extended
++        sed.regexp_extended  = args.regexp_extended
+ 
+         if args.script_file:
+             sed.load_script(args.script_file)
+         elif args.script_string:
+             sed.load_string(args.script_string)
+         else:
+-            raise SedException('too few arguments')
++            raise SedException('main')
+ 
+         if args.dump_script:
+             sed.dump_script()

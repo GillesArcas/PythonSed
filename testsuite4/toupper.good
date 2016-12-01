@@ -1,0 +1,8 @@
+mv /foo /FOO
+mv /foo /FOO
+mv /foo/bar /foo/BAR
+mv /foo/bar /foo/BAR
+mv /foo/bar /foo/BAR
+mv /foo/bar.fred /foo/BAR.FRED
+mv /foo/bar/baz/spam/egg /foo/bar/baz/spam/EGG
+mv /foo/bar/baz/spam/egg.joe /foo/bar/baz/spam/EGG.JOE

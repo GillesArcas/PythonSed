@@ -1,0 +1,284 @@
+[http://rosettacode.org/wiki/Category:Dc]c
+
+[ r is replaced with SySzLyLz ]sz
+
+[-- A+B -----------------------------------------]c
+666 42 + psz
+
+[-- Arbitrary-precision integers ----------------]c
+
+4 3 2 ^ ^ sy                                    [y = 5 ^ 4 ^ 3]sz
+ly Z sc                                         [c = length of y]sz
+[ First 10 digits: ]P ly 10 lc 10 - ^ / p sz    [y / (10 ^ (c - 10))]sz
+
+[-- Arithmetic/Integer --------------------------]c
+
+[[Enter 2 integers on 1 line.
+  Use whitespace to separate. Example: 2 3
+  Use underscore for negative integers. Example: _10
+]P ? sb sa]sz
+17 13 sb sa
+[add: ]P la lb + p sz
+[sub: ]P la lb - p sz
+[mul: ]P la lb * p sz
+[div: ]P la lb / p sz  [truncates toward zero]sz
+[mod: ]P la lb % p sz  [sign matches first operand]sz
+[pow: ]P la lb ^ p sz
+
+[-- Binary digits -------------------------------]c
+
+2o 5p 50p 10o
+
+[-- Case-sensitivity of identifiers -------------]c
+
+[Benjamin]sd
+[Samba]sD
+[The two dogs are named ]P ldP [ and ]P lDP [.
+]P
+
+[-- Comments ------------------------------------]c
+
+[Making and discarding a string acts like a comment] sz
+
+[-- Copy a string -------------------------------]c
+
+[a string]   # push "a string" on the main stack
+d            # duplicate the top value
+f            # show the current contents of the main stack
+
+[-- Count in octal ------------------------------]c
+    [ignored, infinite loop]sz
+
+[
+8o0[p1+lpx]dspx
+]c 
+
+[-- Digital root  -------------------------------]c 
+    [ignored, dc.sed does not seem to exit]sz
+
+[
+127 [10~rd10<p]sp[+z1<q]sq[lpxlqxd10<r]dsrxp
+]c
+
+[-- Ethiopian multiplication --------------------]c 
+    
+0k                    [ Make sure we're doing integer division  ]sx
+[ 2 / ] sH            [ Define "halve" function in register H   ]sx
+[ 2 * ] sD            [ Define "double" function in register D  ]sx
+[ 2 % 1 SySzLyLz - ] sE      [ Define "even?" function in register E   ]sx
+ 
+[ Entry into the main Ethiopian multiplication function is register M ]sx
+[ Keeps running value for the product in register p ]sx
+[ 0 sp lLx lp ] sM
+ 
+[ The body of the main loop is in register L ]sx
+ 
+[ 
+  sb sa             [ First thing we do is cheat and store the parameters in
+                      registers, which is safe because the only recursion is of
+                      the tail variety.  This avoids tricky stack
+                      manipulations, which dc doesn't have good support for
+                      (unlike, say, Forth). ]sx
+ 
+  la lEx sr         [ r = even?(a)  ]sx
+  lr 0 =S           [ if r = 0 then call s]sx
+  la lHx d          [ a = halve(a)]sx
+  lb lDx            [ b = double(b)]sx
+  SySzLyLz 0 !=L    [ if a !=0 then recurse ]sx
+] sL
+ 
+[ Utility macro that just adds the current value of b to the total in p ]sx
+[ lp lb + sp ]sS
+ 
+[ Demo by multiplying 9 and 17 ]sx
+9 17 lMx p
+
+[-- Evaluate binomial coefficients --------------]c
+  
+[sx1q]sz[d0=zd1-lfx*]sf[skdlfxSySzLyLzlk-lfxlklfx*/]sb
+5 3lbxp
+
+[-- Factorial -----------------------------------]c
+
+[*
+ * (n) lfx -- (factorial of n)
+ *]sz
+[
+ 1 Sp           [product = 1]sz
+ [              [Loop while 1 < n:]sz
+  d lp * sp      [product = n * product]sz
+  1 -            [n = n - 1]sz
+  d 1 <f
+ ]Sf d 1 <f
+ Lfsz           [Drop loop.]sz
+ sz             [Drop n.]sz
+ Lp             [Push product.]sz
+]sf
+ 
+[*
+ * For example, print the factorial of 10.
+ *]sz
+10 lfx psz
+
+[-- FizzBuzz ------------------------------------]c
+
+[[Fizz]P 1 sw]sF
+[[Buzz]P 1 sw]sB
+[li p sz]sN
+[[
+]P]sW
+[
+ 0 sw         [w = 0]sz
+ li 3 % 0 =F  [Fizz if 0 == i % 3]sz
+ li 5 % 0 =B  [Buzz if 0 == i % 5]sz
+ lw 0 =N      [print Number if 0 == w]sz
+ lw 1 =W      [print neWline if 1 == w]sz
+ li 1 + si    [i += 1]sz
+ li 5 !<L     [continue Loop if 5 >= i]sz 
+]sL
+1 si          [i = 1]sz
+0 0 =L        [enter Loop]sz
+
+[-- Formatted numeric output --------------------]c
+    [ignored, too long]sz
+
+[-- Function definition -------------------------]c
+
+[*] sm
+3 4 lm x f
+
+[Generic swap]c
+
+1 2 SaSbLaLb f
+
+[-- Greatest common divisor ---------------------]c
+
+28 24 [dSa%LaSaSbLaLbd0<G]dsGx+ p
+
+[-- Hailstone sequence --------------------------]c
+
+3
+[[[--: ]nzpq]sq]sz
+[cq]sq
+[d 2/ p]se
+[d 3*1+ p]so
+[d2% 0=e d1=q d2% 1=o d1=q lxx]dsxx
+
+[-- Happy numbers -------------------------------]c
+    [ignored, dc.sed does not seem to exit]sz
+[
+[lcI~SaSbLaLbscd*+lc0<H]sH
+[0SaSbLaLbsclHxd4<h]sh
+[lIp]sz
+0sI[lI1+dsIlhx2>zz8>s]dssx
+]c
+
+[-- Hello world/Text ----------------------------]c
+
+[Goodbye, World!]p
+
+[-- Integer sequence ----------------------------]c
+    [ignored, not testable]sz
+[
+1[p1+lpx]dspx
+]c
+
+[-- Linear congruential generator ---------------]c
+
+[lR 69069 * 1 + 2147483648 % d sR]sr
+ 
+[* Set seed to 1, then print the first 2 random numbers. *]sz
+1 sR
+lrx psz lrx psz
+
+[-- Long multiplication -------------------------]c
+
+2 64^ 2 64^ *p
+
+[-- Loops/Break ---------------------------------]c
+    [ignored, too long]sz
+    
+[-- Loops/Continue ------------------------------]c
+    [ignored, not testable]sz
+
+[-- Loops/Do-while ------------------------------]c
+
+0 si		[i = 0]sz
+[2Q]sA		[A = code to break loop]sz
+[
+ li 1 + p	[print it = i + 1]sz
+ d si		[i = it, leave it on stack]sz
+ 6 % 0 =A	[call A if 0 == it % 6]sz
+ 0 0 =B		[continue loop]sz
+]sB 0 0 =B
+
+[-- Loops/Downward for --------------------------]c
+
+c
+ 
+[macro s(swap) - (a b : b a)]s.
+[Sa Sb La Lb] ss
+ 
+[macro d(2dup) - (a b : a b a b)]s.
+[Sa d Sb La d Lb lsx] sd
+ 
+[macro m(for) - ]s.
+[lfx 1 - ldx !<m ] sm
+ 
+0 10 ldx [p] sf !<m
+[q]sz
+
+[-- Loops/For -----------------------------------]c
+
+[
+ [*]P           [print asterisk]sz
+ lj 1 + d sj    [increment j, leave it on stack]sz
+ li !<A         [continue loop if i >= j]sz
+]sA
+[
+ 1 d sj         [j = 1, leave it on stack]sz
+ li !<A		[enter loop A if i >= j]sz
+ [
+]P		[print newline]sz
+ li 1 + d si	[increment i, leave it on stack]sz
+ 5 !<B		[continue loop if 5 >= i]sz
+]sB
+1 d si		[i = 1, leave it on stack]sz
+5 !<B		[enter loop B if 5 >= i]sz
+
+[-- Loops/Infinite ------------------------------]c
+    [ignored, not testable]sz
+
+[-- Loops/Nested --------------------------------]c
+    [ignored, too long]sz
+
+[-- Loops/While ---------------------------------]c
+
+256[p2/d0<p]dspx  
+
+[-- Modular exponentiation ----------------------]c
+    [ignored, | not implemented]sz
+[
+2988348162058574136915891421498819466320163312926952423791023078876139 2351399303373464486466122544523690094744975233415544072992656881240319 10 40^|p
+]sz
+
+[-- Quine ---------------------------------------]c
+    [dc.sed does not give the correct result]sz
+
+[91PP93P[dx]P]dx
+
+[-- Shell one-liner -----------------------------]c
+    [ignored, not testable here]sz
+
+[-- String length -------------------------------]c
+[]p
+
+[abcde]Zp
+
+[-- Subtractive generator -----------------------]c
+    [ignored, too long]sz
+
+[-- Towers of Hanoi -----------------------------]c
+    [ignored, too long]sz
+
+    

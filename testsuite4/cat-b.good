@@ -1,0 +1,45 @@
+     1  #! /bin/sed -nf
+
+     2  # This script replaces cat -b; the trick is to save the *next* line 
+     3  # number in hold space, printing the line soon so that we can then
+     4  # discard the pattern space
+
+     5  /^$/ {
+     6    p
+     7    b
+     8  }
+
+     9  x
+    10  /^$/ {
+    11    # Prime the pump
+    12    s/^.*$/1/
+    13  }
+
+    14  # Add the correct line number before the pattern
+    15  G
+    16  h
+    17  s/^/      /
+    18  s/^ *\(......\)\n/\1  /p
+
+    19  # move the line number only to hold space, and add a
+    20  # zero if we're going to add a digit on the next line
+    21  x
+    22  s/\n.*$//
+    23  /^9*$/ s/^/0/
+
+    24  # separate changing/unchanged digits with an x
+    25  s/.9*$/x&/
+
+    26  # keep changing digits in hold space
+    27  h
+    28  s/^.*x//
+    29  y/0123456789/1234567890/
+    30  x
+
+    31  # keep unchanged digits in pattern space
+    32  s/x.*$//
+
+    33  # compose the new number, remove the new-line implicitly added by G
+    34  G
+    35  s/\n//
+    36  h

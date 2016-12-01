@@ -1,0 +1,33 @@
+:abcde:     :     :
+:abcd :e    :     :
+:abc  :e    :d    :
+:abc  :     :de   :
+:ab   :c    :de   :
+:abe  :c    :d    :
+:abe  :cd   :     :
+:ab   :cde  :     :
+:a    :cde  :b    :
+:a    :cd   :be   :
+:ad   :c    :be   :
+:ade  :c    :b    :
+:ade  :     :bc   :
+:ad   :e    :bc   :
+:a    :e    :bcd  :
+:a    :     :bcde :
+:     :a    :bcde :
+:e    :a    :bcd  :
+:e    :ad   :bc   :
+:     :ade  :bc   :
+:c    :ade  :b    :
+:c    :ad   :be   :
+:cd   :a    :be   :
+:cde  :a    :b    :
+:cde  :ab   :     :
+:cd   :abe  :     :
+:c    :abe  :d    :
+:c    :ab   :de   :
+:     :abc  :de   :
+:e    :abc  :d    :
+:e    :abcd :     :
+:     :abcde:     :
+Done!  Try another, or end with ^D.

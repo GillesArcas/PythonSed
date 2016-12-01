@@ -1,0 +1,40 @@
+     1  #! /bin/sed -nf
+     2  
+     3  # This script replaces cat -n; the trick is to save the *next* line
+     4  # number in hold space, printing the line soon so that we can then
+     5  # discard the pattern space
+     6  
+     7  x
+     8  /^$/ {
+     9    # Prime the pump
+    10    s/^.*$/1/
+    11  }
+    12  
+    13  # Add the correct line number before the pattern
+    14  G
+    15  h
+    16  s/^/      /
+    17  s/^ *\(......\)\n/\1  /p
+    18  
+    19  # move the line number only to hold space, and add a
+    20  # zero if we're going to add a digit on the next line
+    21  x
+    22  s/\n.*$//
+    23  /^9*$/ s/^/0/
+    24  
+    25  # separate changing/unchanged digits with an x
+    26  s/.9*$/x&/
+    27  
+    28  # keep changing digits in hold space
+    29  h
+    30  s/^.*x//
+    31  y/0123456789/1234567890/
+    32  x
+    33  
+    34  # keep unchanged digits in pattern space
+    35  s/x.*$//
+    36  
+    37  # compose the new number, remove the new-line implicitly added by G
+    38  G
+    39  s/\n//
+    40  h

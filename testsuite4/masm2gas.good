@@ -1,0 +1,65 @@
+/;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+/;; Find integer square root using binomial theorem (MASM assembly)
+	NAME	sqroot
+	PUBLIC	_sqroot
+
+/; unsigned long sqroot( unsigned long N ).
+/; This routine assumes the argument N is passed on the stack,
+/; and eax-edx are scratch registers.
+
+	TEXT	SEGMENT	PUBLIC	'CODE'
+	ASSUME	CS:	TEXT
+	P386
+
+	_sqroot	PROC	FAR
+        / If 2 > N, return N; otherwise, save the non-scratch registers
+	mov	4(%esp),%eax             / just past the return address
+	cmp	$2,%eax
+	jb	done
+
+	push	%edi
+	push	%esi
+
+        / Compute position of the highest set bit in the root.
+        / It's 1/2 the position of the highest bit set in N.
+	mov	%eax,%esi                 / preserve N for later
+	bsr	%eax,%ecx
+	shr	$1,%ecx
+
+        / Determine the initial values of u, u^2, and v.
+	mov	$1,%eax
+	shlb	%cl,%eax                  / u
+	mov	%eax,%ebx                 / v starts equal to u
+	mov	%eax,%edx
+	shlb	%cl,%edx                  / u^2
+
+        / Process bits until there are no more.
+checkBit:	dec	%ecx
+	js	restore
+
+        / Solve the equation u^2 + 2uv + v^2.
+	shr	$1,%ebx                   / v = next lower bit
+	mov	%eax,%edi
+	add	%eax,%edi
+	add	%ebx,%edi                 / n = 2u + v
+	shlb	%cl,%edi
+	add	%edx,%edi                 / n = u^2 + v(2u + v)
+                                        /   = u^2 + 2uv + v^2
+        / If n <= N, the bit v is set.
+	cmp	%esi,%edi
+	ja	checkBit
+	add	%ebx,%eax                 / u += v
+	mov	%edi,%edx                 / u^2 = n
+	jmp	checkBit
+
+restore:	pop	%esi
+	pop	%edi
+
+done:    / Return to caller.
+	mov	%eax,%edx
+	shr	$16,%edx                  / necessary, but seems silly...
+	retf
+	_sqroot	ENDP
+	TEXT	ENDS
+
+	END

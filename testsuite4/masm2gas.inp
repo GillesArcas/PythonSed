@@ -1,0 +1,65 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Find integer square root using binomial theorem (MASM assembly)
+        NAME    sqroot
+        PUBLIC  _sqroot
+
+;; unsigned long sqroot( unsigned long N ).
+;; This routine assumes the argument N is passed on the stack,
+;; and eax-edx are scratch registers.
+
+TEXT    SEGMENT PUBLIC 'CODE'
+        ASSUME  CS:TEXT
+        P386
+
+_sqroot PROC    FAR
+        ; If 2 > N, return N; otherwise, save the non-scratch registers
+        mov     eax,[esp+4]             ; just past the return address
+        cmp     eax,2
+        jb      short done
+
+        push    edi
+        push    esi
+
+        ; Compute position of the highest set bit in the root.
+        ; It's 1/2 the position of the highest bit set in N.
+        mov     esi,eax                 ; preserve N for later
+        bsr     ecx,eax
+        shr     ecx,1
+
+        ; Determine the initial values of u, u^2, and v.
+        mov     eax,1
+        shl     eax,cl                  ; u
+        mov     ebx,eax                 ; v starts equal to u
+        mov     edx,eax
+        shl     edx,cl                  ; u^2
+
+        ; Process bits until there are no more.
+checkBit: dec    ecx
+        js      short restore
+
+        ; Solve the equation u^2 + 2uv + v^2.
+        shr     ebx,1                   ; v = next lower bit
+        mov     edi,eax
+        add     edi,eax
+        add     edi,ebx                 ; n = 2u + v
+        shl     edi,cl
+        add     edi,edx                 ; n = u^2 + v(2u + v)
+                                        ;   = u^2 + 2uv + v^2
+        ; If n <= N, the bit v is set.
+        cmp     edi,esi
+        ja      short checkBit
+        add     eax,ebx                 ; u += v
+        mov     edx,edi                 ; u^2 = n
+        jmp     short checkBit
+
+restore: pop     esi
+        pop     edi
+
+done:    ; Return to caller.
+        mov     edx,eax
+        shr     edx,16                  ; necessary, but seems silly...
+        retf
+_sqroot ENDP
+TEXT    ENDS
+
+        END

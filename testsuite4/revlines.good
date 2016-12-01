@@ -1,0 +1,9 @@
+$p
+h
+1!G
+# the chars on a single line
+# (or remove them and remove the -n flag above) to reverse
+# the *beginning* of hold space.  Replace these three with a `p'
+# These three reverse the lines in a file by moving the line to
+
+#! /bin/sed -nf

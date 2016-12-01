@@ -1,0 +1,27 @@
+<html>
+
+<head>
+<title>Some title</title>
+</head>
+
+<body bgcolor="pink" text="brown">
+
+<h1>Some header 1</h1>
+
+<h2>Some header 2</h2>
+
+<p>This is a sample <i>webpage</i>.<br>
+
+More text</br></p>
+
+<img src="http://some_link_to_an_image/image.jpg" width="200" height="200" alt="some caption">
+
+<br>
+
+<a href="http://www.somelink.com/somepage" style="color:purple">follow me</a>
+
+</br>
+
+</body>
+
+</html>

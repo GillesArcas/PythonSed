@@ -1,0 +1,537 @@
+<HTML><HEAD></HEAD><BODY bgcolor=white>
+<TT><font color=lightblue>--- \Gilles\sed\sed.py	Sat Sep 20 18:54:58 2014</FONT></TT><BR>
+<TT><font color=darkblue>+++ \Gilles\sed\sed-161.py	Wed Sep 10 20:45:41 2014</FONT></TT><BR>
+<font color=red><TT>@@ -58,7 +58,7 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.output = None<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.output_lines = []<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.no_autoprint = False<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.regexp_extended = False</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.regexp_extended&nbsp; = False<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.subst_successful = False<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.append_buffer = []<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.last_regexp = None<BR></TT>
+<font color=red><TT>@@ -86,27 +86,22 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def create_write_files(self):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for command in self.commands:<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filename = None</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if command.function == 'w':<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filename = command.args</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open(command.args, 'w')<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif command.function == 's':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write = command.args[5]<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filename = command.args[6]</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if write:<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filename = command.args[6]<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if filename:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try:</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open(filename, 'w')<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; except IOError:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('unable to open %s' % filename)</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def parse_flags(self, script):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# match #n on first line, handle #r extension<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if script:<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = re.match('#([rn]{,2})(\s*)($|\b)', script[0])</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; m = re.match('#([rn]{,2})($|\b)', script[0])<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if m:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# combine flags with possible values set before reading<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.no_autoprint = self.no_autoprint or 'n' in m.group(1)<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.regexp_extended = self.regexp_extended or 'r' in m.group(1)</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.regexp_extended = self.regexp_extended&nbsp; or 'r' in m.group(1)<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def convert(self):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for command in self.commands:<BR></TT>
+<font color=red><TT>@@ -257,8 +252,6 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if function == ':' and address1:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('wrong number of addresses')<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if function == '}' and address1:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('wrong number of addresses')</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if function == 'q' and address2:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('wrong number of addresses')<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -267,15 +260,16 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.address1 = address1<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.address2 = address2<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.negate = negate</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.negate&nbsp;&nbsp; = negate<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.function = function<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args = None<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.next = None<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.branch = None</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args&nbsp;&nbsp;&nbsp;&nbsp; = None<BR><BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.next&nbsp;&nbsp;&nbsp;&nbsp; = None<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.branch&nbsp;&nbsp; = None</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.address_range_started = False<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; @staticmethod<BR>
+-&nbsp;&nbsp;&nbsp; def factory(address1, address2, negate, function):</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; @classmethod<BR><BR>
++&nbsp;&nbsp;&nbsp; def factory(clss, address1, address2, negate, function):<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # TODO: clss pas utilise</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classes = { '{': Command_block,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}': Command_block_end,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;':': Command_label,<BR></TT>
+<font color=red><TT>@@ -309,28 +303,34 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('unknown function: %s' % function)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def __str__(self):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 'N:%03d, X:%03d, B:%03d, a1:%s, a2:%s, n:%s, f:%s, a:%s' % (self.num,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.next.num if self.next else 0,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.branch.num if self.branch else 0,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.address1, self.address2,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '!' if self.negate else '+',<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.function,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args)<BR>
++&nbsp;&nbsp;&nbsp; def __str__(self):<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # TODO: finaliser<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if self.function == 's':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; regexp, repl, count, printit, ignore_case, write, filename = self.args<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args = '%-20s|%-20s|%s%s%s%s' % (regexp, repl,<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; count if count else '',<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'p' if printit else '',<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'i' if ignore_case else '',<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'w' if write else '')<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if filename:<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args += ' ' + filename<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args = self.args<BR>
++</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return '|%03d|%03d|%03d|%-10s|%-10s|%1s|%1s|%-20s|' % (self.num,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.next.num if self.next else 0,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.branch.num if self.branch else 0,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.address1, self.address2,<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'!' if self.negate else ' ',<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.function,<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.str_arguments())<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def allow_arguments(self):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return self.function in ':btaicwrsy'<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def str_arguments(self):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return self.args<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def parse_arguments(self, line, i):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i, args = parse_arguments(line, i)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args = args<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if self.args and not self.allow_arguments():<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('arguments not allowed: %s %s' % (self.function, self.args))<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args)<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def convert(self, regexp_extended):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if self.address1:<BR></TT>
+<font color=red><TT>@@ -338,6 +338,14 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if self.address2:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.address2.convert(regexp_extended)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if self.function == 's':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[0] = convert_regexp(self.args[0], regexp_extended)<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[1] = convert_replacement(self.args[1])<BR>
++<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if self.function == 'y':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[0] = convert_argument_y(self.args[0])<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[1] = convert_argument_y(self.args[1])<BR>
++</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def apply_func(self, sed):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if self.address1 is None:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.apply_0addr(sed)<BR></TT>
+<font color=red><TT>@@ -382,18 +390,12 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;class Command_block(Command):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; def parse_arguments(self, line, i):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i<BR>
+-</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def apply(self, sed):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# self.next is the first instruction after block<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# self.branch is the first instruction within block<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.branch<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;class Command_block_end(Command):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; def parse_arguments(self, line, i):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i<BR>
+-</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def apply(self, sed):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.next<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -537,41 +539,6 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.next<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;class Command_s(Command):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; def parse_arguments(self, line, i):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i, args = parse_arguments_s(line, i)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args = args<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def convert(self, regexp_extended):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command.convert(self, regexp_extended)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[0] = convert_regexp(self.args[0], regexp_extended)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[1] = convert_replacement(self.args[1])<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def str_arguments(self):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; regexp, repl, count, printit, ignore_case, write, filename = self.args<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # try to alight right delimiter by reducing repl width if necessary<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l0 = max(20, len(regexp)) + max(20, len(repl))<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if l0 <= 40:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = 20<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; l = max(1, 20 - (l0 - 40))<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # count is 0 for g flag, flag removed if count = 1<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; countflag = 'g' if count == 0 else count if count > 1 else ''<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; flags = '%s%s%s%s' % (countflag,<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'p' if printit else '',<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'i' if ignore_case else '',<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'w' if write else '')<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args = '%-20s|%-*s|%1s' % (regexp, l, repl, flags)<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if filename:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args += ' ' + filename<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return args<BR>
+-</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def apply(self, sed):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regexp, repl, count, printit, ignore_case, write, filename = self.args<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -617,20 +584,6 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return self.next<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;class Command_y(Command):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; def parse_arguments(self, line, i):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i, args = parse_arguments_y(line, i)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args = args<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def convert(self, regexp_extended):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Command.convert(self, regexp_extended)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[0] = convert_argument_y(self.args[0])<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; self.args[1] = convert_argument_y(self.args[1])<BR>
+-<BR>
+-&nbsp;&nbsp;&nbsp; def str_arguments(self):<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; source_chars, dest_chars = self.args<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return '%-20s|%-20s' % (source_chars, dest_chars)<BR>
+-</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def apply(self, sed):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;translate = string.maketrans(*self.args)<BR></TT>
+<font color=red><TT>@@ -748,7 +701,14 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command = Command.factory(address1, address2, negate, function)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; i = command.parse_arguments(line, i)</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; if command.function in '{}':<BR><BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pass<BR>
++&nbsp;&nbsp;&nbsp; elif command.function == 's':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = parse_arguments_s(line, i, command)<BR>
++&nbsp;&nbsp;&nbsp; elif command.function == 'y':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = parse_arguments_y(line, i, command)<BR>
++&nbsp;&nbsp;&nbsp; else:<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = parse_arguments(line, i, command)</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return i, command<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -815,6 +775,22 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return i, AddressRegexp(regexp, ignore_case)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;def parse_function(line, i):<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; FUNC = 'abcdsyirw:tqpl=nhHgGxNPD{}'<BR>
++<BR>
++&nbsp;&nbsp;&nbsp; i, char = ignore_space(line, i)<BR>
++<BR>
++&nbsp;&nbsp;&nbsp; if i >= len(line):<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return len(line), None<BR>
++&nbsp;&nbsp;&nbsp; elif line[i] in FUNC:<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i + 1, line[i]<BR>
++&nbsp;&nbsp;&nbsp; elif line[i] == '#':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return len(line), None<BR>
++&nbsp;&nbsp;&nbsp; elif line[i] == ';':<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return i + 1, None<BR>
++&nbsp;&nbsp;&nbsp; else:<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('unknown function: %s' % line[i])<BR>
++<BR>
++def parse_function(line, i):</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, char = ignore_space(line, i)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -825,14 +801,15 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return i + 1, line[i]<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-def parse_arguments(line, i):</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++def parse_arguments(line, i, command):<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# spaces after function are ignored (s and y treated apart)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, char = ignore_space(line, i)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, tail = parse_tail_of_command(line, i)<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; return i, tail</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; command.args = tail<BR><BR>
++&nbsp;&nbsp;&nbsp; return i</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-def parse_arguments_s(line, i):<BR>
+-&nbsp;&nbsp;&nbsp; i, left = parse_regexp(line, i)</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++def parse_arguments_s(line, i, command):<BR><BR>
++&nbsp;&nbsp;&nbsp; i, left&nbsp; = parse_regexp(line, i)</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, right = parse_replacement(line, i, delim=line[i - 1])<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, flags = parse_tail_of_command(line, i)<BR></TT>
+<font color=red><TT>@@ -861,9 +838,10 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;write = True<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filename = g4.strip()<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; return i, [left, right, count, printit, ignore_case, write, filename]</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; command.args = [left, right, count, printit, ignore_case, write, filename]<BR><BR>
++&nbsp;&nbsp;&nbsp; return i</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-def parse_arguments_y(line, i):</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++def parse_arguments_y(line, i, command):<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if not line:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('y: unterminated command')<BR></TT>
+<TT>&nbsp;<BR></TT>
+<font color=red><TT>@@ -872,11 +850,13 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, left = parse_argument_y(line, i, sep)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, right = parse_argument_y(line, i, sep)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; command.args = [left, right]<BR>
++</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, tail = parse_tail_of_command(line, i)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if tail.strip():<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('y: extra characters after command')<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; return i, [left, right]</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; return i<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;def parse_argument_y(line, i, sep):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# enter with i on first character after separator<BR></TT>
+<font color=red><TT>@@ -898,7 +878,7 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# return index of first char after tail plus tail string<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j = i<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; while j &lt; len(line) and line[j] not in ';}#':</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; while j < len(line) and line[j] not in ';}':<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j += 1<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tail = line[i:j].rstrip()<BR></TT>
+<font color=red><TT>@@ -909,8 +889,6 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return j, tail<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif line[j] == ';':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return j + 1, tail<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; elif line[j] == '#':<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return len(line), tail</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;def parse_number(line, i):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m = re.match('([0-9]+)', line[i:])<BR></TT>
+<font color=red><TT>@@ -1028,19 +1006,12 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif regexp[i] == '[':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i, s = convert_charset(regexp, i)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r += s<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif regexp[i] == '^' and i &gt; 0 and regexp[i-1] not in '(|':</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif regexp[i] == '^' and i > 0:<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r += r'\^'<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i += 1<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif regexp[i] == '$' and i &lt; len(regexp) - 1 and regexp[i+1] not in '|)':</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif regexp[i] == '$' and i < len(regexp) - 1:<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r += r'\$'<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i += 1<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif regexp[i] == '$':<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # see http://www.regular-expressions.info/anchors.html#realend<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # without converting $ to \Z, re finds a end of line before end of<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # string and before a terminating \n :<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # re.sub('$', 'X', '\n') --> 'X\nX'<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r += r'\Z'<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 1</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif regexp[i] in '+*?}':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if i + 1 &lt; len(regexp) and regexp[i + 1] in '+*?{':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raise SedException('regexp: multiple quantifier')<BR></TT>
+<font color=red><TT>@@ -1121,13 +1092,9 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = 0<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while i &lt; len(repl):<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if repl[i] == '\\' and i + 1 &lt; len(repl) and repl[i + 1] in '0123456789':<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if i + 2 &lt; len(repl) and repl[i + 2] in '0123456789':<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # force one digit backreference (\20)<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r += '\\g<' + repl[i + 1] + '>'<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 2<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r += repl[i:i + 2]<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 2</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # force one digit backreference (\20)<BR><BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r += '\\g<' + repl[i + 1] + '>'<BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 2</FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif repl[i] == '\\' and i + 1 < len(repl) and repl[i + 1] in '&':<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r += repl[i + 1]<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i += 2<BR></TT>
+<font color=red><TT>@@ -1214,8 +1181,8 @@<BR></TT></FONT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;USAGE = """<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-sed.py [-n][-r] -f &lt;file&gt; &lt;text file&gt;<BR>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [-n][-r] -e <string> <text file></FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++sed.py [-n][-r][-d] -f <file> <text file><BR><BR>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [-n][-r][-d] -e <string> <text file></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;"""<BR></TT>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;def parse_command_line():<BR></TT>
+<font color=red><TT>@@ -1225,11 +1192,10 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.add_argument("-e", help="script in string", action="store", dest="script_string", metavar='string')<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.add_argument("-n", help="print only if requested", action="store_true", dest="no_autoprint")<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.add_argument("-r", help="regexp extended", action="store_true", dest="regexp_extended")<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; parser.add_argument("-d", help=argparse.SUPPRESS, action="store_true", dest="dump_script")</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; parser.add_argument("-d", help="dump script", action="store_true", dest="dump_script")<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser.add_argument("target", help=argparse.SUPPRESS)<BR></TT>
+<TT>&nbsp;<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp; args = parser.parse_args()<BR>
+-&nbsp;&nbsp;&nbsp; return parser, args</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp; return parser, parser.parse_args()<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;def main():<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parser, args = parse_command_line()<BR></TT>
+<font color=red><TT>@@ -1237,14 +1203,14 @@<BR></TT></FONT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed = Sed()<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed.no_autoprint = args.no_autoprint<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sed.regexp_extended = args.regexp_extended</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sed.regexp_extended&nbsp; = args.regexp_extended<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if args.script_file:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed.load_script(args.script_file)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;elif args.script_string:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed.load_string(args.script_string)<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:<BR></TT>
+<table border=0 cellspacing=0 width=100% bgcolor=#eddcdc><TR><TD>
+<TT><FONT color=darkred>
+-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('too few arguments')</FONT></TT></TD></TR></TABLE>
+<table border=0 cellspacing=0 width=100% bgcolor=#dbf7ff><TR><TD>
+<TT><FONT color=darkblue>
++&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; raise SedException('main')<BR></FONT></TT></TD></TR></TABLE>
+<TT>&nbsp;<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if args.dump_script:<BR></TT>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed.dump_script()<BR></TT>
+</PRE></BODY></HTML>

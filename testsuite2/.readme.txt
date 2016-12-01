@@ -1,0 +1,7 @@
+Scripts from:
+
+- RosettaCode
+- Seder's grab bag
+- github.com/shinh/sedlisp
+
+Reference output from gnused 4.2.1

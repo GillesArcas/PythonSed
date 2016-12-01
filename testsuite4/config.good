@@ -1,0 +1,6 @@
+foo=bar
+bar=rfdjt\njfdjdk\ndkfgdk
+baz=rfdjt\njfdjdk\ndkfgdk
+foo=foo \"foo\" \$foo /foo \\foo
+foo=foo \n\"foo\" \n\$foo \n/foo \n\\foo
+0

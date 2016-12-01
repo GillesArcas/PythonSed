@@ -1,0 +1,79 @@
+<HTML>
+<HEAD><META NAME="Generator" CONTENT="sedsed --htmlize">
+<TITLE>Colorized html_lc.sed</TITLE></HEAD><BODY BGCOLOR="#000000" TEXT="#ffffff"
+LINK="#ff00ff" ALINK="#ff00ff" VLINK="#ff00ff">
+<PRE>
+<FONT COLOR="#00ffff"><B>#! /bin/sed -f</B></FONT>
+
+<FONT COLOR="#00ffff"><B># html_lc.sed -- turn html tags to lowercase</B></FONT>
+
+<FONT COLOR="#00ffff"><B># Just to be sure</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>DEG;</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>&amp;</B></FONT>deg;<FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+
+<FONT COLOR="#00ffff"><B># Multiple lines are handled by storing a flag in hold space</B></FONT>
+<FONT COLOR="#00ffff"><B># Fool the regexps below by adding a leading &lt; (we'll remove</B></FONT>
+<FONT COLOR="#00ffff"><B># it later)</B></FONT>
+<FONT COLOR="#ffff00"><B>x</B></FONT>  
+<FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>^j</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT> <FONT COLOR="#ff6060"><B>{</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+  <FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>^</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>&lt;<FONT COLOR="#ff6060"><B>/</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+<FONT COLOR="#ff6060"><B>}</B></FONT>  
+<FONT COLOR="#ffff00"><B>x</B></FONT>  
+
+<FONT COLOR="#00ffff"><B># put DEG; before each tag name</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>&lt;[ 	]*</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>&amp;</B></FONT>DEG;<FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+
+<FONT COLOR="#00ffff"><B># put DEG; before each attribute name</B></FONT>
+<FONT COLOR="#ffff00"><B>t</B></FONT> <A HREF="#attr">attr</A>
+<FONT COLOR="#ff00ff"><B>:</B></FONT> <FONT COLOR="#ff00ff"><B><A NAME="attr">attr</A></B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>\<FONT COLOR="#ff00ff"><B>(</B></FONT>&lt;[^&gt;]*[ 	]\+\)\<FONT COLOR="#ff00ff"><B>(</B></FONT>[A-Za-z/]\+=[^&gt; 	]\+\)</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>\1</B></FONT>DEG;<FONT COLOR="#00ff00"><B>\2</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>\<FONT COLOR="#ff00ff"><B>(</B></FONT>&lt;[^&gt;]*[ 	]\+\)\<FONT COLOR="#ff00ff"><B>(</B></FONT>[A-Za-z/]\+="[^"]*"\)</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>\1</B></FONT>DEG;<FONT COLOR="#00ff00"><B>\2</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>\<FONT COLOR="#ff00ff"><B>(</B></FONT>&lt;[^&gt;]*[ 	]\+\)\<FONT COLOR="#ff00ff"><B>(</B></FONT>[A-Za-z/]\+\)</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>\1</B></FONT>DEG;<FONT COLOR="#00ff00"><B>\2</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+<FONT COLOR="#ffff00"><B>t</B></FONT> <A HREF="#attr">attr</A>
+
+<FONT COLOR="#00ffff"><B># add conversion table: DEG;DEG; table</B></FONT>
+<FONT COLOR="#00ffff"><B># table format: &lt;to-char&gt; &lt;from-char&gt;</B></FONT>
+<FONT COLOR="#00ffff"><B># characters not in the table stop the conversion</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>,</B></FONT><FONT COLOR="#8080ff"><B>$</B></FONT><FONT COLOR="#ff6060"><B>,</B></FONT>DEG;DEG;//aaAbbBccCddDeeEffFggGhhHiiIjjJkkKllLmmMnnNooOppPqqQrrRssSttTuuUvvVwwWxxXyyYzzZ<FONT COLOR="#ff6060"><B>,</B></FONT>
+
+<FONT COLOR="#00ffff"><B># substitute every char that's part of a tag or attribute and which follows a DEG;</B></FONT>
+<FONT COLOR="#00ffff"><B># also moves DEG; after the char</B></FONT>
+<FONT COLOR="#ffff00"><B>t</B></FONT> <A HREF="#a">a</A>
+<FONT COLOR="#ff00ff"><B>:</B></FONT> <FONT COLOR="#ff00ff"><B><A NAME="a">a</A></B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>DEG;\<FONT COLOR="#ff00ff"><B>(</B></FONT>.\)\<FONT COLOR="#ff00ff"><B>(</B></FONT>.*DEG;DEG;.*\)\<FONT COLOR="#ff00ff"><B>(</B></FONT>.\)\1</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>\3</B></FONT>DEG;<FONT COLOR="#00ff00"><B>\2</B></FONT><FONT COLOR="#00ff00"><B>\3</B></FONT><FONT COLOR="#00ff00"><B>\1</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>
+<FONT COLOR="#ffff00"><B>t</B></FONT> <A HREF="#a">a</A>
+
+<FONT COLOR="#00ffff"><B># cleanup...</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>DEG;DEG;.*</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>DEG;</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#00ff00"><B>g</B></FONT>
+
+<FONT COLOR="#00ffff"><B># Check if the hold space flag is to be set:</B></FONT>
+<FONT COLOR="#00ffff"><B># j = this line continued the previous one</B></FONT>
+<FONT COLOR="#00ffff"><B># J = this line will be continued by the next one</B></FONT>
+<FONT COLOR="#00ffff"><B># jJ = both things</B></FONT>
+
+<FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>&lt;[^&gt;]*$</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT> <FONT COLOR="#ff6060"><B>{</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+  <FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>$</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>J<FONT COLOR="#ff6060"><B>/</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+<FONT COLOR="#ff6060"><B>}</B></FONT>  
+
+<FONT COLOR="#00ffff"><B># If the hold space `j' flag was set, remove it, and also delete</B></FONT>
+<FONT COLOR="#00ffff"><B># the leading &lt; from pattern space</B></FONT>
+<FONT COLOR="#ffff00"><B>x</B></FONT>  
+<FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>^j</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT> <FONT COLOR="#ff6060"><B>{</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+  <FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>^.</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>
+  <FONT COLOR="#ffff00"><B>x</B></FONT>
+  <FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>j</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>
+<FONT COLOR="#ff6060"><B>}</B></FONT>  
+
+<FONT COLOR="#00ffff"><B># Change the `J' flag to `j' and go on with the next line</B></FONT>
+<FONT COLOR="#ffff00"><B>s</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT><FONT COLOR="#8080ff"><B>J</B></FONT><FONT COLOR="#ff6060"><B>/</B></FONT>j<FONT COLOR="#ff6060"><B>/</B></FONT>
+<FONT COLOR="#ffff00"><B>x</B></FONT>  
+
+<FONT COLOR="#00ffff"><B>### colorized by <A HREF="http://sedsed.sf.net">sedsed</A>, a sed script debugger/indenter/tokenizer/HTMLizer
+### original script: <A HREF="http://pcsiwa.rett.polimi.it/~paolob/seders/scripts/html_lc.sed">http://pcsiwa.rett.polimi.it/~paolob/seders/scripts/html_lc.sed</A></B></FONT>
+
+</PRE></BODY></HTML>

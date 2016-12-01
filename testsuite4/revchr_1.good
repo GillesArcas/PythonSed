@@ -1,0 +1,34 @@
+
+a
+ba
+cba
+dcba
+edcba
+fedcba
+gfedcba
+hgfedcba
+a       
+ba      
+cba     
+dcba    
+edcba   
+fedcba  
+gfedcba 
+hgfedcba
+
+a
+b a
+c  b a
+d   c  b a
+e    d   c  b a
+f     e    d   c  b a
+g      f     e    d   c  b a
+h       g      f     e    d   c  b a
+a                                   
+b a                                 
+c  b a                              
+d   c  b a                          
+e    d   c  b a                     
+f     e    d   c  b a               
+g      f     e    d   c  b a        
+h       g      f     e    d   c  b a

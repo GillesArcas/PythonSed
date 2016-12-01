@@ -1,0 +1,19 @@
+From sed-4.2.1.tar.gz
+--------------------
+
+binary2.inp  is a copy of binary.inp
+binary2.good is a copy of binary.good
+binary3.inp  is a copy of binary.inp
+binary3.good is a copy of binary.good
+
+noeolw.inp is a double copy of noeol.inp (not sure if doubling the input is equivalent to two calls of the script on the same file)
+noeolw.1good renamed to noeolw.wgood1
+noeolw.2good renamed to noeolw.wgood2
+noeolw.sed modified to write noeolw.wout1 and noeolw.wout2
+
+subwrt1.good renamed to subwrite.good
+subwrt2.good renamed to subwrite.wgood
+
+wrtout1.good renamed to writeout.good
+wrtout2.good renamed to writeout.wgood
+
