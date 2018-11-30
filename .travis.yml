@@ -18,6 +18,7 @@ matrix:
 install:
   - pip install .
   - pip install coveralls
+  - pip list
 
 script:
   - coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude
