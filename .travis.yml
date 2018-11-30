@@ -16,6 +16,7 @@ matrix:
 
 
 install:
+  - pip install .
   - pip install coveralls
 
 script:
