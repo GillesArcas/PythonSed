@@ -564,18 +564,25 @@ def main():
     else:
         target = None
 
-    if args.exclude:
-        try:
-            with open(args.exclude) as f:
-                exclude = [line.strip() for line in f.readlines()]
-        except:
-            print('Error reading exclude file:', args.exclude)
-            sys.exit(1)
-    else:
-        exclude = list()
+    try:
+        current_dir = os.getcwd()
+        test_dir = os.path.dirname(sys.argv[0])
+        os.chdir(test_dir)
 
-    all_tests = load_testsuite(testsuite)
-    run_testsuite(all_tests, target, args.binary, exclude, args.elapsed_only)
+        if args.exclude:
+            try:
+                with open(args.exclude) as f:
+                    exclude = [line.strip() for line in f.readlines()]
+            except:
+                print('Error reading exclude file:', args.exclude)
+                sys.exit(1)
+        else:
+            exclude = list()
+
+        all_tests = load_testsuite(testsuite)
+        run_testsuite(all_tests, target, args.binary, exclude, args.elapsed_only)
+    finally:
+        os.chdir(current_dir)
 
 if __name__ == "__main__":
     main()
