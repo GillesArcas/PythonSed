@@ -19,7 +19,7 @@ install:
   - pip install coveralls
 
 script:
-  - coverage run tests\test-suite.py @all-tests.suites -x test-python-sed.exclude
+  - coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude
 
 after_success:
   - coveralls
