@@ -1,0 +1,23 @@
+0range.sed
+# 0 address not implemented
+
+badenc.sed
+# z command not implemented
+
+classes.sed
+# classes ( [:digit:] ) not implemented
+
+modulo.sed
+# modulo not implemented
+
+space.sed
+# \s \S not implemented
+
+eval.sed
+# e command and e flag are specific to gnu sed and not implemented in sed.py
+
+flipcase.sed
+# \L \U etc ignored by sed.by
+
+html_links.sed
+# newline is not a delimiter for s/// (lines 43, 44, 45)
