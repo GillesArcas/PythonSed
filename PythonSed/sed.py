@@ -767,8 +767,7 @@ class Regexp:
         return m is not None
 
     def subn(self, repl, string, count):
-        return ''
-        #return re_sub_ex(self.pattern, self.compiled, repl, string, count, self.flags)
+        return re_sub_ex(self.pattern, self.compiled, repl, string, count, self.flags)
 
 
 # -- Parser ------------------------------------------------------------------
@@ -1348,10 +1347,11 @@ def re_sub_ex(pattern, compiled, replacement, string, count, flags):
                     return matchobj.group(0)
 
     try:
+        repl = replacement if 0 else Nth()
         if compiled is None:
-            string_res, nsubst = re.subn(pattern, Nth(), string, count, flags)
+            string_res, nsubst = re.subn(pattern, repl, string, count, flags)
         else:
-            string_res, nsubst = compiled.subn(Nth(), string, count)
+            string_res, nsubst = compiled.subn(repl, string, count)
 
     except re.error as e:
         raise SedException('regexp: %s' % e.message)
