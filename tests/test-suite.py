@@ -93,7 +93,7 @@ class BaseTest:
                 else:
                     with open(self.goodname, encoding="latin-1") as f:
                         ref_output = [line.strip('\n\r') for line in f.readlines()]
-             except IOError:
+            except IOError:
                 print('error reading %s' % self.goodname)
                 sys.exit(1)
             except:
