@@ -87,13 +87,13 @@ class BaseTest:
             ref_output = []
         else:
             try:
-                with open(self.goodname) as f:
-                    ref_output = [line.strip('\n\r') for line in f.readlines()]
-                    #
-                    #ref_output = [x.encode() for x in ref_output]
-                    #ref_output = [x.decode('latin_1') for x in ref_output]
-                    #
-            except IOError:
+                if sys.version_info[0] == 2:
+                    with open(self.goodname) as f:
+                        ref_output = [line.strip('\n\r') for line in f.readlines()]
+                else:
+                    with open(self.goodname, encoding="latin-1") as f:
+                        ref_output = [line.strip('\n\r') for line in f.readlines()]
+             except IOError:
                 print('error reading %s' % self.goodname)
                 sys.exit(1)
             except:
