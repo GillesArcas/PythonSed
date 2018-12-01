@@ -215,7 +215,10 @@ class Reader:
             if source_file == sys.stdin:
                 self.input_file = sys.stdin
             else:
-                self.input_file = open(source_file)
+                if sys.version_info[0] == 2:
+                    self.input_file = open(source_file)
+                else:
+                    self.input_file = open(source_file, encoding="latin-1")
         except IOError:
             raise SedException('unable to open %s' % source_file)
         except:
