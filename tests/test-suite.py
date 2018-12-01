@@ -565,6 +565,7 @@ def main():
         target = None
 
     try:
+        # navigate to script directory
         current_dir = os.getcwd()
         test_dir = os.path.dirname(sys.argv[0])
         os.chdir(test_dir)
@@ -581,6 +582,7 @@ def main():
 
         all_tests = load_testsuite(testsuite)
         run_testsuite(all_tests, target, args.binary, exclude, args.elapsed_only)
+
     finally:
         os.chdir(current_dir)
 
