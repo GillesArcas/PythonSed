@@ -767,7 +767,8 @@ class Regexp:
         return m is not None
 
     def subn(self, repl, string, count):
-        return re_sub_ex(self.pattern, self.compiled, repl, string, count, self.flags)
+        return ''
+        #return re_sub_ex(self.pattern, self.compiled, repl, string, count, self.flags)
 
 
 # -- Parser ------------------------------------------------------------------
@@ -1338,11 +1339,11 @@ def re_sub_ex(pattern, compiled, replacement, string, count, flags):
             self.calls = 0
         def __call__(self, matchobj):
             if count == 0:
-                return re._expand(pattern, Match(matchobj), replacement)
+                return re._expand(compiled, Match(matchobj), replacement)
             else:
                 self.calls += 1
                 if self.calls == count:
-                    return re._expand(pattern, Match(matchobj), replacement)
+                    return re._expand(compiled, Match(matchobj), replacement)
                 else:
                     return matchobj.group(0)
 
