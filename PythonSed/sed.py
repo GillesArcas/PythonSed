@@ -68,8 +68,12 @@ class Sed:
 
     def load_script(self, filename):
         try:
-            with open(filename) as f:
-                string_list = f.readlines()
+            if sys.version_info[0] == 2:
+                with open(filename) as f:
+                    string_list = f.readlines()
+            else:
+                with open(filename, encoding="latin-1") as f:
+                    string_list = f.readlines()
         except:
             raise SedException('error reading ' + filename)
         self.load_string_list(string_list)
