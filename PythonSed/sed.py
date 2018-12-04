@@ -1332,6 +1332,7 @@ def re_sub_ex(pattern, compiled, replacement, string, count, flags):
     #   (http://gromgull.net/blog/2012/10/python-regex-unicode-and-brokenness/)
     # - the nth occurrence is replaced rather than the nth first ones
     #   (https://mail.python.org/pipermail/python-list/2008-December/475132.html)
+    # - since 3.5, first agument of _expand must be a compiled regex
 
     class Match():
         def __init__(self, m):
@@ -1354,11 +1355,10 @@ def re_sub_ex(pattern, compiled, replacement, string, count, flags):
                     return matchobj.group(0)
 
     try:
-        repl = replacement if 0 else Nth()
         if compiled is None:
-            string_res, nsubst = re.subn(pattern, repl, string, count, flags)
+            string_res, nsubst = re.subn(pattern, Nth(), string, count, flags)
         else:
-            string_res, nsubst = compiled.subn(repl, string, count)
+            string_res, nsubst = compiled.subn(Nth(), string, count)
 
     except re.error as e:
         raise SedException('regexp: %s' % e.message)
