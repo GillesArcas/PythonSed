@@ -177,7 +177,7 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
 
 <table>
     <tr>
-        <td><code width=150>char</code></td><td>standard behavior</td>
+        <td width=150><code>char</code></td><td>standard behavior</td>
     </tr>
     <tr>
         <td><code>*</code></td><td>standard behavior</td>
@@ -198,16 +198,13 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>.</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>^</code></td><td>standard behavior. When not at start of
-        regexp, matches as itself</td>
+        <td><code>^</code></td><td>standard behavior. When not at start of regexp, matches as itself</td>
     </tr>
     <tr>
-        <td><code>$</code></td><td>standard behavior. When not at end of
-        regexp, matches as itself</td>
+        <td><code>$</code></td><td>standard behavior. When not at end of regexp, matches as itself</td>
     </tr>
     <tr>
-        <td><code>[list] [^list]</code></td><td>standard behavior. [.ch.],
-        [=a=], [:space:] are not implemented</td>
+        <td><code>[list] [^list]</code></td><td>standard behavior. [.ch.], [=a=], [:space:] are not implemented</td>
     </tr>
     <tr>
         <td><code>regexp1\|regexp2</code></td><td>standard behavior</td>
@@ -216,19 +213,15 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>regexp1regexp2</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>\digit</code></td><td>standard behavior (back
-        reference)</td>
+        <td><code>\digit</code></td><td>standard behavior (back reference)</td>
     </tr>
     <tr>
-        <td><code>\n \t</code></td><td>standard behavior (extensions \s\S
-        etc. are not handled)</td>
+        <td><code>\n \t</code></td><td>standard behavior (extensions \s\S etc. are not handled)</td>
     </tr>
     <tr>
-        <td><code>\char</code></td><td>standard behavior (disable special
-        regexp characters)</td>
+        <td><code>\char</code></td><td>standard behavior (disable special regexp characters)</td>
     </tr>
 </table>
-
 
 
 Note that for any combination of quantifiers (\*, +, ?, {}), consecutive quantifiers or a quantifier starting a regexp will launch an error. This is true in basic or extended regular expression modes.
@@ -316,8 +309,7 @@ Using the -r switch enables to simplify regular expressions by removing the anti
         <td><code>H</code></td><td>Compliant</td><td>&nbsp;</td>
     </tr>
     <tr>
-        <td><code>i\<br/>
-        text</code></td><td>Compliant</td><td>(including single line and double address extensions)</td>
+        <td><code>i\<br/>text</code></td><td>Compliant</td><td>(including single line and double address extensions)</td>
     </tr>
     <tr>
         <td><code>l</code></td><td>Compliant</td><td>(length parameter not implemented)</td>
@@ -359,6 +351,7 @@ Using the -r switch enables to simplify regular expressions by removing the anti
         <td><code>#</code></td><td>Compliant</td><td>(comments start anywhere in the line.)</td>
     </tr>
 </table>
+
 
 Compliant means compliant with <a href="https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands">GNU sed description</a>.
 
