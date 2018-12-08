@@ -135,75 +135,142 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
 * * *
 
 
-| Addresses         | status            |
-| :---------------- | ----------------- |
-| `number`          | standard behavior |
-| `$`               | standard behavior |
-| `/regexp/`        | standard behavior |
-| `/regexp/I`       | implemented       |
-| `\%regexp%`       | standard behavior |
-| `address,address` | standard behavior |
-| `address!`        | standard behavior |
-| `0,/regexp/`      | not implemented   |
-| `first~step`      | not implemented   |
-| `addr1,+N`        | not implemented   |
-| `addr1,~N`        | not implemented   |
-| **Regular expressions** | **status**                                                   |
-| `char`                 | standard behavior                                            |
-| `*`                    | standard behavior                                            |
-| `\+`                   | standard behavior                                            |
-| `\?`                   | standard behavior                                            |
-| `\{i\} \{i,j} \{i,\}`  | standard behavior                                            |
-| `\(regexp\)`           | standard behavior                                            |
-| `.`                    | standard behavior                                            |
-| `^`                    | standard behavior. When not at start of regexp, matches as itself |
-| `$`                    | standard behavior. When not at end of regexp, matches as itself |
-| `[list] [^list]`       | standard behavior. \[.ch.\], \[=a=\], \[:space:\] are not implemented |
-| `regexp1`&#124;`regexp2`  | standard behavior                                            |
-| `regexp1regexp2`       | standard behavior                                            |
-| `\digit`               | standard behavior (back reference)                           |
-| `\n \t`                | standard behavior (extensions \\s\\S etc. are not handled)   |
-| `\char`                | standard behavior (disable special regexp characters)        |
+#### Addresses
+
+<table>
+    <tr>
+        <td width=150><code>number</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>$</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>/regexp/</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>/regexp/I</code></td><td>implemented</td>
+    </tr>
+    <tr>
+        <td><code>\%regexp%</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>address,address</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>address!</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>0,/regexp/</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>first~step</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>addr1,+N</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>addr1,~N</code></td><td>not implemented</td>
+    </tr>
+</table>
+
+#### Regular expressions
+
+<table>
+    <tr>
+        <td><code width=150>char</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>*</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>\+</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>\?</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>\{i\} \{i,j\} \{i,\}</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>\(regexp\)</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>.</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>^</code></td><td>standard behavior. When not at start of
+        regexp, matches as itself</td>
+    </tr>
+    <tr>
+        <td><code>$</code></td><td>standard behavior. When not at end of
+        regexp, matches as itself</td>
+    </tr>
+    <tr>
+        <td><code>[list] [^list]</code></td><td>standard behavior. [.ch.],
+        [=a=], [:space:] are not implemented</td>
+    </tr>
+    <tr>
+        <td><code>regexp1\|regexp2</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>regexp1regexp2</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>\digit</code></td><td>standard behavior (back
+        reference)</td>
+    </tr>
+    <tr>
+        <td><code>\n \t</code></td><td>standard behavior (extensions \s\S
+        etc. are not handled)</td>
+    </tr>
+    <tr>
+        <td><code>\char</code></td><td>standard behavior (disable special
+        regexp characters)</td>
+    </tr>
+</table>
+
+
+
 Note that for any combination of quantifiers (\*, +, ?, {}), consecutive quantifiers or a quantifier starting a regexp will launch an error. This is true in basic or extended regular expression modes.
 
 
-    <table>
-        <tr>
-            <td width=150><code>number</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>$</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>/regexp/</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>/regexp/I</code></td><td>implemented</td>
-        </tr>
-        <tr>
-            <td><code>\%regexp%</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>address,address</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>address!</code></td><td>standard behavior</td>
-        </tr>
-        <tr>
-            <td><code>0,/regexp/</code></td><td>not implemented</td>
-        </tr>
-        <tr>
-            <td><code>first~step</code></td><td>not implemented</td>
-        </tr>
-        <tr>
-            <td><code>addr1,+N</code></td><td>not implemented</td>
-        </tr>
-        <tr>
-            <td><code>addr1,~N</code></td><td>not implemented</td>
-        </tr>
-    </table>
+<table>
+    <tr>
+        <td width=150><code>number</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>$</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>/regexp/</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>/regexp/I</code></td><td>implemented</td>
+    </tr>
+    <tr>
+        <td><code>\%regexp%</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>address,address</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>address!</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>0,/regexp/</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>first~step</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>addr1,+N</code></td><td>not implemented</td>
+    </tr>
+    <tr>
+        <td><code>addr1,~N</code></td><td>not implemented</td>
+    </tr>
+</table>
 
-    
+​    
 * * *
 
 #### Extended regular expressions
@@ -214,33 +281,86 @@ Using the -r switch enables to simplify regular expressions by removing the anti
 
 #### Commands
 
-| command         | comment                                                      |                                                              |
-| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| `a\ <rc> text`  | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (comments start anywhere in the line.)                       |
-| `b label`       | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Programming-Commands.html#Programming-Commands) |                                                              |
-| `: label`       | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Programming-Commands.html#Programming-Commands) |                                                              |
-| `c\ <rc> text`  | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (including single line and double address extensions)        |
-| `d`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Common-Commands.html#Common-Commands) |                                                              |
-| `D`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `=`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (including double address extension)                         |
-| `g`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `G`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `h`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `H`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `i\  <br/>text` | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (including single line and double address extensions)        |
-| `l`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (length parameter not implemented)                           |
-| `n`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Common-Commands.html#Common-Commands) |                                                              |
-| `N`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `p`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Common-Commands.html#Common-Commands) |                                                              |
-| `P`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `q`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Common-Commands.html#Common-Commands) | (except exit code extension)                                 |
-| `r filename`    | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (including double address extension but not reading from stdin) |
-| `s`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/The-_0022s_0022-Command.html#The-_0022s_0022-Command) | (except escape sequences in replacement (\\L, \\l, \\U, \\u, \\E), modifiers e and M/m, and combination of modifier g and number) |
-| `t label`       | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Programming-Commands.html#Programming-Commands) |                                                              |
-| `w filename`    | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) | (including double address extension but not writing to stdout or stderr) |
-| `x`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `y`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands) |                                                              |
-| `#`             | Compliant with [GNU sed description](https://www.gnu.org/software/sed/manual/html_node/Common-Commands.html#Other-Commands). | (comments start anywhere in the line.)                       |
+<table>
+    <tr>
+        <td width=150><code>a\<br/>text</code></td><td width=250>Compliant</td><td width=500>(including one liner syntax and double address extensions)</td>
+    </tr>
+    <tr>
+        <td><code>b label</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>: label</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>c\<br/>text</code></td><td>Compliant</td><td>(including single line and double address extensions)</td>
+    </tr>
+    <tr>
+        <td><code>d</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>D</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>=</code></td><td>Complian</td><td>(including double address extension)</td>
+    </tr>
+    <tr>
+        <td><code>g</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>G</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>h</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>H</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>i\<br/>
+        text</code></td><td>Compliant</td><td>(including single line and double address extensions)</td>
+    </tr>
+    <tr>
+        <td><code>l</code></td><td>Compliant</td><td>(length parameter not implemented)</td>
+    </tr>
+    <tr>
+        <td><code>n</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>N</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>p</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>P</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>q</code></td><td>Compliant</td><td>(except exit code extension)</td>
+    </tr>
+    <tr>
+        <td><code>r filename</code></td><td>Compliant</td><td>(including double address extension but not reading from stdin)</td>
+    </tr>
+    <tr>
+        <td><code>s</code></td><td>Compliant</td><td>(except escape sequences in replacement (\L, \l, \U, \u, \E), modifiers e and M/m, and combination of modifier g and number)</td>
+    </tr>
+    <tr>
+        <td><code>t label</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>w filename</code></td><td>Compliant</td><td>(including double address extension but not writing to stdout or stderr)</td>
+    </tr>
+    <tr>
+        <td><code>x</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>y</code></td><td>Compliant</td><td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><code>#</code></td><td>Compliant</td><td>(comments start anywhere in the line.)</td>
+    </tr>
+</table>
+
+Compliant means compliant with <a href="https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands">GNU sed description</a>.
 
 The other commands specific to GNU sed are not implemented.
 
