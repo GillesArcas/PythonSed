@@ -37,7 +37,6 @@ if __name__ == "__main__":
             for name in files:
                 test_files.append(os.path.join(path, name))
         data_files=[
-        # ('Lib/site-packages/PythonSed', ['README.md', 'LICENSE'] + glob.glob('tests/*.*')),
         ('tests', test_files)
         ]
 

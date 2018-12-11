@@ -1340,13 +1340,25 @@ def re_sub_ex(pattern, compiled, replacement, string, count, flags):
             self.string = m.string
         def group(self, n):
             return self.m.group(n) or ''
+        def start(self, i):
+            return self.m.start(i)
+        def end(self, i):
+            return self.m.end(i)
 
     class Nth(object):
         def __init__(self):
             self.calls = 0
+            self.prevmatch = None
         def __call__(self, matchobj):
             if count == 0:
-                return re._expand(compiled, Match(matchobj), replacement)
+                match = Match(matchobj)
+                try:
+                    if self.prevmatch and match.group(0) == '' and match.start(0) == self.prevmatch.end(0):
+                        return match.group(0)
+                    else:
+                        return re._expand(compiled, match, replacement)
+                finally:
+                    self.prevmatch = match
             else:
                 self.calls += 1
                 if self.calls == count:
