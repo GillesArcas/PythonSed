@@ -2,11 +2,6 @@
 A full and working Python implementation of sed
 
 # [![Build Status](https://travis-ci.org/GillesArcas/PythonSed.svg?branch=master)](https://travis-ci.org/GillesArcas/PythonSed) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
-<<<<<<< HEAD
-
-=======
->>>>>>> testtmp
-
 ### Contents
 
 * * *
@@ -497,8 +492,3 @@ At one moment, one has to decide what will be in the release to come, and what c
 *   Better error handling when testing (the error message could be tested)
 *   Use sed.py as a basis for a sed debugger.
 *   ...
-
-
-
-
-![](http://www.godrago.net/piwik/piwik.php?idsite=1)
