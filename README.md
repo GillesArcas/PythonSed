@@ -1,10 +1,7 @@
-sed.py
-======
+# PythonSed
+A full and working Python implementation of sed
 
-A full implementation of sed in Python
---------------------------------------
-
-* * *
+# [![Build Status](https://travis-ci.org/GillesArcas/PythonSed.svg?branch=master)](https://travis-ci.org/GillesArcas/PythonSed) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
 
 ### Contents
 
@@ -294,7 +291,7 @@ Using the -r switch enables to simplify regular expressions by removing the anti
         <td><code>D</code></td><td>Compliant</td><td>&nbsp;</td>
     </tr>
     <tr>
-        <td><code>=</code></td><td>Complian</td><td>(including double address extension)</td>
+        <td><code>=</code></td><td>Compliant</td><td>(including double address extension)</td>
     </tr>
     <tr>
         <td><code>g</code></td><td>Compliant</td><td>&nbsp;</td>
@@ -371,30 +368,29 @@ The tests are either coded in text files with .suite extension or may be stored 
 
 The test suites are:
 
-`unit.suite`
-
-a text file containing unitary tests
-
-`chang.suite`
-
-a text file containing scripts from [Roger Chang web site](http://www.rtfiber.com.tw/~changyj/sed/)
-
-`test-suite1`
-
-a set of scripts from [GNU sed test suite](ftp://ftp.gnu.org/gnu/sed/)
-
-`test-suite2`
-
-a set of scripts from the [seder's grab-bag](http://sed.sourceforge.net/grabbag/), [Rosetta code web site](http://rosettacode.org/wiki/Rosetta_Code) and GitHub ([lisp](http://github.com/shinh/sedlisp)!)
-
-`test-suite3`
-
-additional unitary tests better stored in a folder with some extra data text files
-
-`test-suite4`
-
-a set of scripts from the [sed $HOME](http://http://sed.sourceforge.net/)
-
+<table>
+    <tr>
+    <td width=150><code>unit.suite</code></td><td>a text filecontaining unitary tests</td>
+    </tr>
+    <tr>
+    <td><code>chang.suite</code></td><td>a text file containing scripts from <a href="http://www.rtfiber.com.tw/~changyj/sed/">Roger Chang web site</a></td>
+    </tr>
+    <tr>
+        <td><code>test-suite1</code></td><td>a set of scripts from <a href="ftp://ftp.gnu.org/gnu/sed/">GNU sed test suite</a></td>
+    </tr>
+    <tr>
+        <td><code>test-suite2</code></td><td>a set of scripts from the <a
+        href="http://sed.sourceforge.net/grabbag/">seder's grab-bag</a>, <a
+        href="http://rosettacode.org/wiki/Rosetta_Code">Rosetta code web site</a> and GitHub (<a href="http://github.com/shinh/sedlisp">lisp</a>!)</td>
+    </tr>
+    <tr>
+        <td><code>test-suite3</code></td><td>additional unitary tests better stored in a folder with some extra data text files</td>
+    </tr>
+    <tr>
+        <td><code>test-suite4</code></td><td>a set of scripts from the <a
+        href="http://http://sed.sourceforge.net/">sed $HOME</a></td>
+    </tr>
+</table>
 Note that the goal of these tests is not to check the correctness of the scripts but to verify that `sed.py` and GNU sed have the same behavior.
 
 * * *
@@ -406,7 +402,7 @@ Tests are launched and checked with the `test-suite.py` Python script. This scri
 The calling syntax is:
 
 ```
-test-suite.py <testsuite> \[number\] \[-b executable\] \[-x list of script references\]
+test-suite.py <testsuite> [number] [-b executable] [-x list of script references]
 ```
 
 | Parameters                  |                                                              |
