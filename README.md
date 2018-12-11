@@ -222,44 +222,6 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
 
 Note that for any combination of quantifiers (\*, +, ?, {}), consecutive quantifiers or a quantifier starting a regexp will launch an error. This is true in basic or extended regular expression modes.
 
-
-<table>
-    <tr>
-        <td width=150><code>number</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>$</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>/regexp/</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>/regexp/I</code></td><td>implemented</td>
-    </tr>
-    <tr>
-        <td><code>\%regexp%</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>address,address</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>address!</code></td><td>standard behavior</td>
-    </tr>
-    <tr>
-        <td><code>0,/regexp/</code></td><td>not implemented</td>
-    </tr>
-    <tr>
-        <td><code>first~step</code></td><td>not implemented</td>
-    </tr>
-    <tr>
-        <td><code>addr1,+N</code></td><td>not implemented</td>
-    </tr>
-    <tr>
-        <td><code>addr1,~N</code></td><td>not implemented</td>
-    </tr>
-</table>
-
-​    
 * * *
 
 #### Extended regular expressions
