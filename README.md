@@ -8,17 +8,17 @@ A full and working Python implementation of sed
 
 [General Information](#generalinformation)
 
-[Usage as a command line utility](#usageconsole)
+[Usage as a command line utility](#usageasacommandlineutility)
 
-[Usage as a Python module](#usagemodule)
+[Usage as a Python module](#usageasapythonmodule)
 
-[Sed dialect](#dialect)
+[Sed dialect](#seddialect)
 
 [Testing](#testing)
 
 [Timing](#timing)
 
-[To do list](#todo)
+[To do list](#todolist)
 
 * * *
 
