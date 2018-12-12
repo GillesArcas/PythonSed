@@ -6,19 +6,19 @@ A full and working Python implementation of sed
 
 * * *
 
-[General Information](#GeneralInformation)
+[General Information](#generalinformation)
 
-[Usage as a command line utility](#UsageConsole)
+[Usage as a command line utility](#usageconsole)
 
-[Usage as a Python module](#UsageModule)
+[Usage as a Python module](#usagemodule)
 
-[Sed dialect](#Dialect)
+[Sed dialect](#dialect)
 
-[Testing](#Testing)
+[Testing](#testing)
 
-[Timing](#Timing)
+[Timing](#timing)
 
-[To do list](#Todo)
+[To do list](#todo)
 
 * * *
 
@@ -28,17 +28,16 @@ A full and working Python implementation of sed
 
 #### Description
 
-`sed.py` is a full and working Python implementation of sed. Its reference is GNU sed 4.2 of which it implements almost all commands and features. It may be used as a command line utility or it can be used as a module to bring sed functionality to Python scripts.
+`pythonsed` is a full and working Python implementation of sed. Its reference is GNU sed 4.2 of which it implements almost all commands and features. It may be used as a command line utility or it can be used as a module to bring sed functionality to Python scripts.
 
 A complete set of tests is available as well as a testing utility. These tests include scripts from various origins and cover all aspects of sed functionalities.
 
 * * *
 
-#### Platform
+#### Compatibility
 
-`sed.py` is a Python script and should run on any platform where a recent version of Python is installed.
 
-| Version                    | Compatibility status                                         |
+| Version                    |  Status                                         |
 | -------------------------- | ------------------------------------------------------------ |
 | Python 3.7                 | Fully compatible except s///g with zero length matches. See this [question at stackoverflow](https://stackoverflow.com/questions/53642571/retrieving-python-3-6-handling-of-re-sub-with-zero-length-matches-in-python-3) |
 | Python 3                   | Fully compatible                                             |
@@ -76,8 +75,9 @@ This installs a command line utility named `pythonsed` and a package named `Pyth
 
 `pythonsed` is as console program receiving information from the command line. The format of the command line is:
 
-`pythonsed \[options\] -e<script expression> <input text file>`
-`pythonsed \[options\] -f<script file> <input text file>`
+`pythonsed [options] -e<script expression> <input text file>`
+
+`pythonsed [options] -f<script file> <input text file>`
 
 Note that `pythonsed` accepts only one script file or expression, and only one input file. `options` may be one or both of:
 
@@ -126,9 +126,9 @@ The script may also be read from a string by using `sed.load_string(my_script_st
 
 * * *
 
-`sed.py` implements all standard commands and regular expression features of sed. Its reference is GNU sed 4.2. It implements almost all its features except the most specific ones.
+`PythonSed` implements all standard commands and regular expression features of sed. Its reference is GNU sed 4.2. It implements almost all its features except the most specific ones.
 
-GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve as a reference for `sed.py` given the differences described in the following.
+GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve as a reference for `PythonSed` given the differences described in the following.
 
 * * *
 
@@ -325,7 +325,7 @@ The other commands specific to GNU sed are not implemented.
 
 #### Description
 
-The working of `sed.py` is tested and compared to the behavior of GNU sed with a set of tests and a testing utility.
+The working of `PythonSed` is tested and compared to the behavior of GNU sed with a set of tests and a testing utility.
 
 The tests are either coded in text files with .suite extension or may be stored in test directories as standard sed scripts.
 
@@ -360,7 +360,7 @@ Note that the goal of these tests is not to check the correctness of the scripts
 
 #### Testing utility
 
-Tests are launched and checked with the `test-suite.py` Python script. This script uses either `sed.py` to run the sed scripts, or any sed executable. This enables to compare the working of `sed.py` with the one of GNU sed.
+Tests are launched and checked with the `test-suite.py` Python script. This script uses either `sed.py` to run the sed scripts, or any sed executable. This enables to compare the working of `PythonSed` with the one of GNU sed.
 
 The calling syntax is:
 
