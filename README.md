@@ -6,19 +6,19 @@ A full and working Python implementation of sed
 
 * * *
 
-[General Information](#generalinformation)
+[General Information](#general-information)
 
-[Usage as a command line utility](#usageasacommandlineutility)
+[Usage as a command line utility](#usage-as-a-command-line-utility)
 
-[Usage as a Python module](#usageasapythonmodule)
+[Usage as a Python module](#usage-as-a-python-module)
 
-[Sed dialect](#seddialect)
+[Sed dialect](#sed-dialect)
 
 [Testing](#testing)
 
 [Timing](#timing)
 
-[To do list](#todolist)
+[To do list](#to-do-list)
 
 * * *
 
@@ -439,6 +439,8 @@ Test conditions:
 *   Only script files are used (scripts from folders testsuiteN). This is to avoid measuring the time to extract scripts, inputs and results from .suite files.
 *   The given values are averaged from three consecutive test runs.
 
+
+* * *
 
 ### To do list
 
