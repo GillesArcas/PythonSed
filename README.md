@@ -52,7 +52,7 @@ Compatibility status applies also to the testing utility `test-suite.py`.
 
 #### License
 
-`sed.py` is released under the MIT license.
+`PythonSed` is released under the MIT license.
 
 ------
 
@@ -60,7 +60,7 @@ Compatibility status applies also to the testing utility `test-suite.py`.
 
 ------
 
-To install, just clone or download the depository zip file and run the setup in download directory:
+To install, just clone or download the repository zip file and run the setup in download directory:
 
 ```
 pip install .
@@ -360,7 +360,7 @@ Note that the goal of these tests is not to check the correctness of the scripts
 
 #### Testing utility
 
-Tests are launched and checked with the `test-suite.py` Python script. This script uses either `sed.py` to run the sed scripts, or any sed executable. This enables to compare the working of `PythonSed` with the one of GNU sed.
+Tests are launched and checked with the `test-suite.py` Python script. This script uses either `PythonSed` package to run the sed scripts, or any sed executable. This enables to compare the working of `PythonSed` with the one of GNU sed.
 
 The calling syntax is:
 
@@ -456,5 +456,5 @@ At one moment, one has to decide what will be in the release to come, and what c
 
 *   Better error handling (display of the number of the line in error)
 *   Better error handling when testing (the error message could be tested)
-*   Use sed.py as a basis for a sed debugger.
+*   Use PythonSed as a basis for a sed debugger.
 *   ...
