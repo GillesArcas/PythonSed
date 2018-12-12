@@ -55,42 +55,44 @@ Compatibility status applies also to the testing utility `test-suite.py`.
 
 `sed.py` is released under the MIT license.
 
-* * *
+------
+
+### Install
+
+------
+
+To install, just clone or download the depository zip file and run the setup in download directory:
+
+```
+pip install .
+```
+This installs a command line utility named `pythonsed` and a package named `PythonSed`. 
+
+***
 
 ### Usage as a command line utility
 
-* * *
+------
 
-`sed.py` may be used as console program receiving information from the command line. The format of the command line is:
+`pythonsed` is as console program receiving information from the command line. The format of the command line is:
 
-`sed.py \[options\] -e<script expression> <input text file>`
-`sed.py \[options\] -f<script file> <input text file>`
+`pythonsed \[options\] -e<script expression> <input text file>`
+`pythonsed \[options\] -f<script file> <input text file>`
 
-Note that `sed.py` accepts only one script file or expression, and only one input file. `options` may be one or both of:
+Note that `pythonsed` accepts only one script file or expression, and only one input file. `options` may be one or both of:
 
 `-n` disable automatic printing
 
 `-r`use extended regular expressions
 
-`sed.py` may also use redirection to receive its input or send its output with the usual syntax:
+`pythonsed` may also use redirection to receive its input or send its output with the usual syntax:
 
-`cat myfile | sed.py -f myscript1 | sed.py -f myscript2 > myresultfile`
+`cat myfile | pythonsed -f myscript1.sed | pythonsed -f myscript2.sed > myresultfile`
 
-It is also possible for `sed.py` to receive its input from the keyboard by omitting any input file:
+It is also possible for `pythonsed` to receive its input from the keyboard by omitting any input file:
 
-`sed.py -f myscript`
+`pythonsed -f myscript.sed`
 
-It is a Windows command line limitation that redirection does not work when calling directly a python script on the command line (check [this](https://mail.python.org/pipermail/python-bugs-list/2004-August/024920.html) for explanation). In that case, it is required to explicitly call python. Assuming python is in the path:
-
-`> type myfile | python sed.py -f myscript > myresultfile`
-
-It is also possible to hide the call in a batch file and even call it without any extension:
-
-```
-> type sed.batpython sed.py %1 %2 %3 %4 %5
-> type myfile | sed -f myscript > myresultfile
-> ...
-```
 * * *
 
 ### Usage as a Python module
@@ -100,7 +102,7 @@ It is also possible to hide the call in a batch file and even call it without an
 An example covering all necessary symbols:
 
 ```python
-from sed import Sed, SedException
+from PythonSed import Sed, SedException
 
 sed = Sed()
 try:

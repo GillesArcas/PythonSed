@@ -36,9 +36,6 @@ if __name__ == "__main__":
         for path, subdirs, files in os.walk(r'PythonSed\tests'):
             for name in files:
                 test_files.append(os.path.join(path, name))
-        data_files=[
-        ('tests', test_files)
-        ]
 
         setup(
             name='PythonSed',
@@ -54,9 +51,7 @@ if __name__ == "__main__":
             },
             zip_safe=True,
             include_package_data=True,
-            data_files=data_files
-            #package_data=data_files
-            #package_data={'test': ['tests/testsuite1/*.*', ]}
+            data_files=[('tests', test_files)]
         )
 
     finally:
