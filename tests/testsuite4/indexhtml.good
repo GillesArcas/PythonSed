@@ -109,7 +109,7 @@
         <li><a href="http://pythonsed.godrago.net">[1] Home page</a></li>
         <li><a href="http://pythonsed.godrago.net/pythonsed-py-1.00.zip">[2] Download script</a></li>
         <li><a href="http://pythonsed.godrago.net/pythonsed-tests-1.00.zip">[3] Download script and tests</a></li>
-        <li><a href="http://code.google.com/p/pythonsed/">[4] Repository</a></li>
+        <li><a href="https://github.com/GillesArcas/PythonSed">[4] Repository</a></li>
         <li>Mail to: gilles dot arcas at gmail dot com</li>
     </ul>
     <p style="font-size:1px">&nbsp;</p>
@@ -519,7 +519,7 @@ test-suite.py &lt;testsuite&gt; [number] [-b executable] [-x list of script refe
 <hr>[1] http://pythonsed.godrago.net<br>
 [2] http://pythonsed.godrago.net/pythonsed-py-1.00.zip<br>
 [3] http://pythonsed.godrago.net/pythonsed-tests-1.00.zip<br>
-[4] http://code.google.com/p/pythonsed/<br>
+[4] https://github.com/GillesArcas/PythonSed<br>
 [5] https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands<br>
 [6] https://www.gnu.org/software/sed/manual/html_node/Programming-Commands.html#Programming-Commands<br>
 [7] https://www.gnu.org/software/sed/manual/html_node/Programming-Commands.html#Programming-Commands<br>
