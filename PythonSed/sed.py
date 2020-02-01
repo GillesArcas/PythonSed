@@ -216,8 +216,8 @@ class Reader:
 
     def open(self, source_file, need_last_line=False):
         try:
-            if source_file == sys.stdin:
-                self.input_file = sys.stdin
+            if type(source_file) != str:
+                self.input_file = source_file
             else:
                 if sys.version_info[0] == 2:
                     self.input_file = open(source_file)
