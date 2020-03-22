@@ -116,7 +116,7 @@ except:
     raise
 ```
 
-Note that `sed.apply()` returns the list of lines printed by the script. As a default, these lines are printed to stdout. `sed.apply()` has an output parameter which enables to inhibit printing the lines (`output=None`) or enables to redirect the output to some text file (`output=somefile.txt`).
+`sed.apply()`  input parameter may be a string (which is interpreted as a filename) or file-like object (including streams). Note that `sed.apply()` returns the list of lines printed by the script. As a default, these lines are printed to stdout. `sed.apply()` has an output parameter which enables to inhibit printing the lines (`output=None`) or enables to redirect the output to some text file (`output='somefile.txt'`) or to a file-like object (including streams). Note also that if myinput or myoutput are file-like objects, they must be closed by the caller.
 
 The script may also be read from a string by using `sed.load_string(my_script_string)`.
 
@@ -438,7 +438,6 @@ Test conditions:
 
 *   Only script files are used (scripts from folders testsuiteN). This is to avoid measuring the time to extract scripts, inputs and results from .suite files.
 *   The given values are averaged from three consecutive test runs.
-
 
 * * *
 

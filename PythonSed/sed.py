@@ -41,15 +41,22 @@ import webbrowser
 class Sed:
     """Usage:
 
-    from sed import Sed, SedException
+    from PythonSed import Sed, SedException
     sed = Sed()
     sed.no_autoprint = True/False
     sed.regexp_extended = True/False
     sed.load_script(myscript)
     sed.load_string(mystring)
-    lines = sed.apply(myinputfile)                print lines to stdout
-    lines = sed.apply(myinputfile, None)          do not print lines
-    lines = sed.apply(myinputfile, myoutput.txt)  print lines to myoutput.txt
+    lines = sed.apply(myinput)                print lines to stdout
+    lines = sed.apply(myinput, None)          do not print lines
+    lines = sed.apply(myinput, myoutput)      print lines to myoutput
+
+    myinput and myoutput may be:
+    * strings, in that case they are interpreted as file names
+    * file-like objects (including streams)
+
+    Note that if myinput or myoutput are file-like objects, they must be closed
+    by the caller.
     """
 
     def __init__(self):
@@ -157,8 +164,17 @@ class Sed:
         self.reader.open(source_file, self.need_last_line())
         self.output = output
         self.output_lines = []
-        self.PS = self.readline()
 
+        if output is not None:
+            if type(output) != str:
+                self.output = output
+            else:
+                if sys.version_info[0] == 2:
+                    self.output = open(output, 'wt')
+                else:
+                    self.output = open(output, 'wt', encoding="latin-1")
+
+        self.PS = self.readline()
         while self.PS is not None:
             matched, command = False, self.first_cmd
             while command:
@@ -191,6 +207,9 @@ class Sed:
 
             if prev_command.function != 'D':
                 self.PS = self.readline()
+
+            if type(output) == str:
+                self.output.close()
 
         return self.output_lines
 
