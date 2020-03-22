@@ -15,8 +15,9 @@ install:
 
 script:
   - if [ $TRAVIS_PYTHON_VERSION != '2.7' ]; then coverage run tests/test_script_io.py; fi
-  - if [ $TRAVIS_PYTHON_VERSION < '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude; fi
-  - if [ $TRAVIS_PYTHON_VERSION > '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
+  - if [ $TRAVIS_PYTHON_VERSION != '3.7' -a $TRAVIS_PYTHON_VERSION != '3.8']; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude; fi
+  - if [ $TRAVIS_PYTHON_VERSION = '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
+  - if [ $TRAVIS_PYTHON_VERSION = '3.8' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
 
 after_success:
   - coveralls
