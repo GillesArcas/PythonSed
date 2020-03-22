@@ -23,6 +23,7 @@ install:
   - pip install coveralls
 
 script:
+  - tests/test_script_io.py
   - if [ $TRAVIS_PYTHON_VERSION != '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude; fi
   - if [ $TRAVIS_PYTHON_VERSION = '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
 
