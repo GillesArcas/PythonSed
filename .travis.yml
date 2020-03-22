@@ -2,21 +2,27 @@
 
 language: python
 
-matrix:
-  include:
-    - python: 2.7
-      dist: trusty
-      sudo: false
-    - python: 3.5
-      dist: trusty
-      sudo: false
-    - python: 3.6
-      dist: trusty
-      sudo: false
-    - python: 3.7
-      dist: xenial
-      sudo: true
+#matrix:
+#  include:
+#    - python: 2.7
+#      dist: trusty
+#      sudo: false
+#    - python: 3.5
+#      dist: trusty
+#      sudo: false
+#    - python: 3.6
+#      dist: trusty
+#      sudo: false
+#    - python: 3.7
+#      dist: xenial
+#      sudo: true
 
+python:
+  - "2.7"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
 
 install:
   - pip install .
