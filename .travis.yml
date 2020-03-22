@@ -2,21 +2,6 @@
 
 language: python
 
-#matrix:
-#  include:
-#    - python: 2.7
-#      dist: trusty
-#      sudo: false
-#    - python: 3.5
-#      dist: trusty
-#      sudo: false
-#    - python: 3.6
-#      dist: trusty
-#      sudo: false
-#    - python: 3.7
-#      dist: xenial
-#      sudo: true
-
 python:
   - "2.7"
   - "3.5"
@@ -30,8 +15,8 @@ install:
 
 script:
   - if [ $TRAVIS_PYTHON_VERSION != '2.7' ]; then coverage run tests/test_script_io.py; fi
-  - if [ $TRAVIS_PYTHON_VERSION != '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude; fi
-  - if [ $TRAVIS_PYTHON_VERSION = '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
+  - if [ $TRAVIS_PYTHON_VERSION < '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed.exclude; fi
+  - if [ $TRAVIS_PYTHON_VERSION > '3.7' ]; then coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude; fi
 
 after_success:
   - coveralls
