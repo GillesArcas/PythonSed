@@ -4,7 +4,6 @@ Test input and output arguments of sed.apply (filenames, files or streams)
 
 import os
 import sys
-import io
 from PythonSed import Sed
 
 INPUT_DATA="""\
@@ -63,11 +62,11 @@ def test_inplace(script,inplace,debug):
         remove_file(INPUT_FILENAME_2+'.bkup')
         remove_file(OUTPUT_FILENAME)
         
-        with io.open(INPUT_FILENAME_1, 'wt') as f:
+        with open(INPUT_FILENAME_1, 'wt') as f:
             print(INPUT_FILENAME_1, file=f)
             print(INPUT_DATA, file=f, end='')
     
-        with io.open(INPUT_FILENAME_2, 'wt') as f:
+        with open(INPUT_FILENAME_2, 'wt') as f:
             print(INPUT_FILENAME_2, file=f)
             print(INPUT_DATA, file=f, end='')
                 
@@ -76,14 +75,14 @@ def test_inplace(script,inplace,debug):
         
         exit_code = sed.exit_code
         if os.path.exists(OUTPUT_FILENAME):
-            with io.open(OUTPUT_FILENAME,'rt') as f:
+            with open(OUTPUT_FILENAME,'rt') as f:
                 s = f.read()
             if len(s)>0:
                 print('The command should have not printed anything but output the following:')
                 print(s)
                 exit_code += 2
     
-        with io.open(INPUT_FILENAME_1,'rt') as f:
+        with open(INPUT_FILENAME_1,'rt') as f:
             s = f.read()
         if s!=INPUT_FILENAME_1+'\n'+OUTPUT_DATA:
             print('---- The input file 1 contains:')
@@ -92,7 +91,7 @@ def test_inplace(script,inplace,debug):
             print(INPUT_FILENAME_1+'\n'+OUTPUT_DATA)
             exit_code += 4
                 
-        with io.open(INPUT_FILENAME_2,'rt') as f:
+        with open(INPUT_FILENAME_2,'rt') as f:
             s = f.read()
         if s!=INPUT_FILENAME_2+'\n'+OUTPUT_DATA:
             print('---- The input file 2 contains:')
