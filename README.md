@@ -1,7 +1,9 @@
 # PythonSed
 A full and working Python implementation of sed
 
-# [![Build Status](https://travis-ci.org/GillesArcas/PythonSed.svg?branch=master)](https://travis-ci.org/GillesArcas/PythonSed) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
+[![Build Status](https://travis-ci.org/GillesArcas/PythonSed.svg?branch=master)](https://travis-ci.org/GillesArcas/PythonSed)
+
+[![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
 ### Contents
 
 * * *
@@ -28,7 +30,7 @@ A full and working Python implementation of sed
 
 #### Description
 
-`pythonsed` is a full and working Python implementation of sed. Its reference is GNU sed 4.2 of which it implements almost all commands and features. It may be used as a command line utility or it can be used as a module to bring sed functionality to Python scripts.
+`pythonsed` is a full and working Python implementation of sed. Its reference is GNU sed 4.8 of which it implements nearly all commands and features. It may be used as a command line utility or it can be used as a module to bring sed functionality to Python scripts.
 
 A complete set of tests is available as well as a testing utility. These tests include scripts from various origins and cover all aspects of sed functionalities.
 
@@ -37,9 +39,10 @@ A complete set of tests is available as well as a testing utility. These tests i
 #### Compatibility
 
 
-| Version                    |  Status                                         |
+| Version                    |  Status                                                      |
 | -------------------------- | ------------------------------------------------------------ |
-| Python 3.7                 | Fully compatible except s///g with zero length matches. See this [question at stackoverflow](https://stackoverflow.com/questions/53642571/retrieving-python-3-6-handling-of-re-sub-with-zero-length-matches-in-python-3) |
+| Python 3.8                 | Fully compatible                                             |
+| Python 3.7                 | Fully compatible even for s///g with zero length matches. See this [question at stackoverflow](https://stackoverflow.com/questions/53642571/retrieving-python-3-6-handling-of-re-sub-with-zero-length-matches-in-python-3) |
 | Python 3                   | Fully compatible                                             |
 | Python 2.7.4 and above     | Fully compatible                                             |
 | Python 2.7 to Python 2.7.3 | Fully compatible except regexps of the form ((.\*)\*). This causes one of the script from Chang suite to fail. |
@@ -73,17 +76,45 @@ This installs a command line utility named `pythonsed` and a package named `Pyth
 
 ------
 
-`pythonsed` is as console program receiving information from the command line. The format of the command line is:
+`pythonsed` is as console program receiving information from the command line. The format of the command line identical to that of GNU sed version 4.8 with the addition of the option -p or --python-syntax, which allows to specify Python regular expressions instead of the less powerful sed variant:
 
-`pythonsed [options] -e<script expression> <input text file>`
+```
+usage: sed.py [-h] [-H] [-v] [-f file] [-e string] [-i [backup suffix]] [-n]
+              [-s] [-p] [-r] [-l LINE_LENGTH] [-d]
+              [targets [targets ...]]
 
-`pythonsed [options] -f<script file> <input text file>`
+sed.py - python sed module and command line utility
 
-Note that `pythonsed` accepts only one script file or expression, and only one input file. `options` may be one or both of:
+positional arguments:
+  targets               files to be processed (defaults to stdin if not
+                        specified)
 
-`-n` disable automatic printing
+optional arguments:
+  -h, --help            show this help message and exit
+  -H, --htmlhelp        open html help page in web browser
+  -v                    display version
+  -f file, --file file  add script commands from file
+  -e string, --expression string
+                        add script commands from string
+  -i [backup suffix], --in-place [backup suffix]
+                        change input files in place
+  -n, --quiet, --silent
+                        print only if requested
+  -s, --separate        consider input files as separate files instead of a
+                        continuous strem
+  -p, --python-syntax   Python regexp syntax
+  -r, -E, --regexp-extended
+                        extended regexp syntax
+  -l LINE_LENGTH, --line-length LINE_LENGTH
+                        line length to be used by l command
+  -d, --debug           dump script and annotate execution on stderr
 
-`-r`use extended regular expressions
+Options -e and -f can be repeated multiple times and add to the commands
+executed for each line of input in the sequence they are specified.
+
+If neither -e nor -f is given, the first positional parameter is taken
+as the script, as if it had been prefixed with -e.
+```
 
 `pythonsed` may also use redirection to receive its input or send its output with the usual syntax:
 
@@ -118,7 +149,23 @@ except:
 
 `sed.apply()`  input parameter may be a string (which is interpreted as a filename) or file-like object (including streams). Note that `sed.apply()` returns the list of lines printed by the script. As a default, these lines are printed to stdout. `sed.apply()` has an output parameter which enables to inhibit printing the lines (`output=None`) or enables to redirect the output to some text file (`output='somefile.txt'`) or to a file-like object (including streams). Note also that if myinput or myoutput are file-like objects, they must be closed by the caller.
 
-The script may also be read from a string by using `sed.load_string(my_script_string)`.
+The script is given to sed by one or more calls to `sed.load_string(my_script_string)` and/or  `sed.load_script(my_script_file)` where my_script_file can be either a file name or a file-like object (including streams). The final script is the concatination of what was given in the various calls to `load_string` and `load_script` in the sequence of the calls.
+
+The available attributes and their defaults are:
+
+<table border="1">
+<tr><th align="left">Attribute</th><th align="left">Default</th></tr>
+<tr><td>encoding</td>        <td>'latin-1'</td></tr>
+<tr><td>line_length</td>     <td>70</td></tr>
+<tr><td>no_autoprint</td>    <td>False</td></tr>
+<tr><td>regexp_extended</td> <td>False</td></tr>
+<tr><td>sed_compatible</td>  <td>True</td></tr>
+<tr><td>in_place</td>        <td>None</td></tr>
+<tr><td>separate</td>        <td>False</td></tr>
+<tr><td>debug</td>           <td>0..3</td></tr>
+</table>
+
+They can all be specified as named parameters on the constructor of the Sed object or set individually before the call to `apply()`, which can be called multiple times on the same Sed object with changing attributes in between. The script can only be appended to after the creation of the Sed object and subsequent calls to `apply()` will re-compile the extended script before applying it to the input.
 
 * * *
 
@@ -126,9 +173,10 @@ The script may also be read from a string by using `sed.load_string(my_script_st
 
 * * *
 
-`PythonSed` implements all standard commands and regular expression features of sed. Its reference is GNU sed 4.2. It implements almost all its features except the most specific ones.
+`PythonSed` implements all standard commands and regular expression features of sed. Its reference is GNU sed 4.8. It implements all its features except for character classes (no support in Python for those) and
+the GNU sed specific command e. 
 
-GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve as a reference for `PythonSed` given the differences described in the following.
+GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve as a reference for `PythonSed`.
 
 * * *
 
@@ -146,7 +194,7 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>/regexp/</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>/regexp/I</code></td><td>implemented</td>
+        <td><code>/regexp/I</code></td><td>standard behavior</td>
     </tr>
     <tr>
         <td><code>\%regexp%</code></td><td>standard behavior</td>
@@ -158,16 +206,16 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>address!</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>0,/regexp/</code></td><td>not implemented</td>
+        <td><code>0,/regexp/</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>first~step</code></td><td>not implemented</td>
+        <td><code>first~step</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>addr1,+N</code></td><td>not implemented</td>
+        <td><code>addr1,+N</code></td><td>standard behavior</td>
     </tr>
     <tr>
-        <td><code>addr1,~N</code></td><td>not implemented</td>
+        <td><code>addr1,~N</code></td><td>standard behavior</td>
     </tr>
 </table>
 
@@ -202,7 +250,7 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>$</code></td><td>standard behavior. When not at end of regexp, matches as itself</td>
     </tr>
     <tr>
-        <td><code>[list] [^list]</code></td><td>standard behavior. [.ch.], [=a=], [:space:] are not implemented</td>
+        <td><code>[list] [^list]</code></td><td>standard behavior</td>
     </tr>
     <tr>
         <td><code>regexp1\|regexp2</code></td><td>standard behavior</td>
@@ -214,7 +262,10 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
         <td><code>\digit</code></td><td>standard behavior (back reference)</td>
     </tr>
     <tr>
-        <td><code>\n \t</code></td><td>standard behavior (extensions \s\S etc. are not handled)</td>
+        <td><code>textual escapes like \n and \t</code></td><td>standard behavior</td>
+    </tr>
+    <tr>
+        <td><code>functional escapes like \s, \S, \&lt; and \w</code></td><td>standard behavior</td>
     </tr>
     <tr>
         <td><code>\char</code></td><td>standard behavior (disable special regexp characters)</td>
@@ -222,13 +273,13 @@ GNU sed [manual](http://www.gnu.org/software/sed/manual/sed.html) page can serve
 </table>
 
 
-Note that for any combination of quantifiers (\*, +, ?, {}), consecutive quantifiers or a quantifier starting a regexp will launch an error. This is true in basic or extended regular expression modes.
+Note that for any combination of quantifiers (\*, +, ?, {}), consecutive quantifiers or a quantifier starting a regexp will produce an error. This is true in basic or extended regular expression modes.
 
 * * *
 
 #### Extended regular expressions
 
-Using the -r switch enables to simplify regular expressions by removing the antislah character before the special characters +, ?, (, ), |, { and }. If these characters must appear as regular characters in a regexp, they must be slashed.
+Using the -r switch enables to simplify regular expressions by removing the backslash character before the special characters +, ?, (, ), |, { and }. If these characters must appear as regular characters in a regexp, they must be backslashed.
 
 * * *
 
@@ -293,7 +344,7 @@ Using the -r switch enables to simplify regular expressions by removing the anti
         <td><code>r filename</code></td><td>Compliant</td><td>(including double address extension but not reading from stdin)</td>
     </tr>
     <tr>
-        <td><code>s</code></td><td>Compliant</td><td>(except escape sequences in replacement (\L, \l, \U, \u, \E), modifiers e and M/m, and combination of modifier g and number)</td>
+        <td><code>s</code></td><td>Compliant</td><td>(including escape sequences in replacement (\L, \l, \U, \u, \E), modifiers M/m and combination of modifier g and number, but excluding modifier e)</td>
     </tr>
     <tr>
         <td><code>t label</code></td><td>Compliant</td><td>&nbsp;</td>
@@ -315,8 +366,6 @@ Using the -r switch enables to simplify regular expressions by removing the anti
 
 Compliant means compliant with <a href="https://www.gnu.org/software/sed/manual/html_node/Other-Commands.html#Other-Commands">GNU sed description</a>.
 
-The other commands specific to GNU sed are not implemented.
-
 * * *
 
 ### Testing
@@ -333,7 +382,7 @@ The test suites are:
 
 <table>
     <tr>
-    <td width=150><code>unit.suite</code></td><td>a text filecontaining unitary tests</td>
+    <td width=150><code>unit.suite</code></td><td>a text file containing unitary tests</td>
     </tr>
     <tr>
     <td><code>chang.suite</code></td><td>a text file containing scripts from <a href="http://www.rtfiber.com.tw/~changyj/sed/">Roger Chang web site</a></td>
@@ -447,13 +496,6 @@ Test conditions:
 
 At one moment, one has to decide what will be in the release to come, and what can be delayed. Here are some features which would be nice to have but can be delayed to a future version.
 
-*   Better POSIX compliance:
-
-*   multiple scripts on the command line (-e, -f)
-*   multiple input file
-*   character classes
-
-*   Better error handling (display of the number of the line in error)
 *   Better error handling when testing (the error message could be tested)
 *   Use PythonSed as a basis for a sed debugger.
 *   ...

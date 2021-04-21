@@ -7,7 +7,7 @@ test-suite.py - unit testing utility for sed - sed.godrago.net\
 
 VERSION = '1.00'
 
-USAGE = """
+USAGE = """\
 test-suite.py [@]<file> [test-ref] [-b binary] [-x exclude-file]
 <file> may be:
     - a text file implementing tests, cf. unit.suite
@@ -41,6 +41,7 @@ THE SOFTWARE.
 import sys
 import os
 import re
+import io
 import argparse
 import subprocess
 import time
@@ -67,16 +68,16 @@ class BaseTest:
         self.current_dir =  None
         self.error_expected = False
 
-    def run(self, binary=None):
+    def run(self, binary=None, debug=False):
 
         if binary is None:
             self.run_output = run_python_sed(self.scriptname, self.inputname,
                                              self.no_autoprint,
-                                             self.regexp_extended)
+                                             self.regexp_extended,debug)
         else:
             self.run_output = run_binary_sed(self.scriptname, self.inputname,
                                              self.no_autoprint,
-                                             self.regexp_extended,
+                                             self.regexp_extended,debug,
                                              binary)
 
     def checktest(self, ntest, scriptname, wgood):
@@ -87,12 +88,8 @@ class BaseTest:
             ref_output = []
         else:
             try:
-                if sys.version_info[0] == 2:
-                    with open(self.goodname) as f:
-                        ref_output = [line.strip('\n\r') for line in f.readlines()]
-                else:
-                    with open(self.goodname, encoding="latin-1") as f:
-                        ref_output = [line.strip('\n\r') for line in f.readlines()]
+                with io.open(self.goodname, encoding="latin-1") as f:
+                    ref_output = [line.strip('\n\r') for line in f.readlines()]
             except IOError:
                 print('error reading %s' % self.goodname)
                 sys.exit(1)
@@ -126,9 +123,9 @@ class SuiteTest(BaseTest):
     def __init__(self, title, script, inputlines, resultlines):
         BaseTest.__init__(self)
 
-        self.scriptname = 'script.sed'
-        self.inputname = 'script.inp'
-        self.goodname  = 'script.good'
+        self.scriptname = 'test-tmp-script.sed'
+        self.inputname = 'test-tmp-script.inp'
+        self.goodname  = 'test-tmp-script.good'
         self.flagsname = None
 
         # script, input and result may be empty. In that case, the
@@ -202,7 +199,7 @@ class FolderTest(BaseTest):
         os.chdir(self.folder)
 
         if not os.path.isfile(self.inputname):
-            print('%s: input file not found' % self.scriptname)
+            print('%s: input file not found' % self.inputname)
             os.chdir(self.current_dir)
             return False
 
@@ -211,14 +208,13 @@ class FolderTest(BaseTest):
             self.error_expected = True
 
         # read flags file if any
+        self.no_autoprint = False
+        self.regexp_extended = False
         if os.path.isfile(self.flagsname):
             with open(self.flagsname) as f:
                 for line in f:
-                    self.no_autoprint = '-n' in line
-                    self.regexp_extended = '-r' in line
-        else:
-            self.no_autoprint = False
-            self.regexp_extended = False
+                    self.no_autoprint = self.no_autoprint or ('-n' in line)
+                    self.regexp_extended = self.regexp_extended or ('-r' in line)
 
         # find list of wgood files (files written by w command or w switch)
         wgood = os.listdir('.')
@@ -247,10 +243,13 @@ class FolderTest(BaseTest):
 # -- Helpers -----------------------------------------------------------------
 
 
-def run_python_sed(scriptname, inputfile, no_autoprint, regexp_extended):
+def run_python_sed(scriptname, inputfile, no_autoprint, regexp_extended, debug):
     sed = Sed()
     sed.no_autoprint = no_autoprint
     sed.regexp_extended = regexp_extended
+    if debug:
+        sed.debug = 2
+        
     try:
         # all loading methods must give the same result
         mode = 1 # 1, 2, 3
@@ -268,19 +267,20 @@ def run_python_sed(scriptname, inputfile, no_autoprint, regexp_extended):
         else:
             raise Exception()
 
-        return sed.apply(inputfile, None)
+        return ''.join(sed.apply(inputfile, None)).split('\n')
     except SedException as e:
-        print(e.message)
+        print(e.message,file=sys.stderr)
         return None
     except:
         raise
 
 def run_binary_sed(scriptname, inputfile, no_autoprint, regexp_extended,
-                   binary):
-    template = r'%s %s %s -f %s %s'
+                   binary, debug):
+    template = r'%s %s %s %s -f %s %s'
     command_line = template % (binary,
                                '-n' if no_autoprint else '',
                                '-r' if regexp_extended else '',
+                               '-d' if debug else '',
                                scriptname,
                                inputfile)
     try:
@@ -327,24 +327,34 @@ def checktest(testnum, testname, ref_output, run_output, wgood):
     else:
         print('Test %3d failure: %s' % (testnum, testname))
         for x in diff:
-            print(repr(x))
+            print(str(x))
 
     return result
 
 def list_compare(tag1, tag2, list1, list2):
 
+    max_lst_len = max(len(list1), len(list2))
+    if max_lst_len==0:
+        return True,[]
+    
+    max_txt_len=max(list(len(txt) for txt in (list1+list2))+[len(tag1),len(tag2)])
+    
     # make sure both lists have same length
-    maxlen = max(len(list1), len(list2))
-    list1.extend([''] * (maxlen - len(list1)))
-    list2.extend([''] * (maxlen - len(list2)))
+    list1.extend([''] * (max_lst_len - len(list1)))
+    list2.extend([''] * (max_lst_len - len(list2)))
 
     diff = list()
     res = True
+    diff.append('| No | ? | {tag1:<{txtlen}.{txtlen}s} | {tag2:<{txtlen}.{txtlen}s} |'
+                .format(tag1=tag1, tag2=tag2, txtlen=max_txt_len))
     for i, (x, y) in enumerate(zip(list1, list2)):
-        if x != y:
-            diff.append('line %s %d: %s' % (tag1, i + 1, x))
-            diff.append('line %s %d: %s' % (tag2, i + 1, y))
-            res = False
+        diff.append('| {idx:>2d} | {equal:1.1s} | {line1:<{txtlen}.{txtlen}s} | {line2:<{txtlen}.{txtlen}s} |'
+                     .format(idx=i+1,
+                             equal=(' ' if x==y else '*'),
+                             txtlen=max_txt_len,
+                             line1=x,
+                             line2=y))
+        res = res and x==y
     return res, diff
 
 def file_compare(fn1, fn2):
@@ -487,6 +497,8 @@ def load_testsuite_batch(testsuite):
 def run_testsuite(tests, target, binary, exclude, elapsed_only):
     start = time.time()
     result = True
+    debug = target is not None;
+    n_succeeded = 0
     n_failed = 0
     n_ignored = 0
     for index, test in enumerate(tests):
@@ -500,13 +512,15 @@ def run_testsuite(tests, target, binary, exclude, elapsed_only):
                 n_ignored += 1
             else:
                 if test.prepare():
-                    test.run(binary)
+                    test.run(binary,debug=debug)
                     if elapsed_only:
                         pass
                     else:
                         res = test.check(user_index, test.title)
                         if not res:
                             n_failed += 1
+                        else:
+                            n_succeeded += 1
                         result = result and res
                     test.postproc()
                 else:
@@ -517,11 +531,11 @@ def run_testsuite(tests, target, binary, exclude, elapsed_only):
     elapsed = end - start
 
     if result:
-        print('All tests ok (ignored: %d)' % n_ignored)
+        print('All tests ok (succeeded: %d, ignored: %d)' % (n_succeeded, n_ignored))
         print('Elapsed: %.3fs' % elapsed)
         sys.exit(0)
     else:
-        print('Test failure (ignored: %d, failed: %d)' % (n_ignored, n_failed))
+        print('Test failure (succeeded: %d, ignored: %d, failed: %d)' % (n_succeeded, n_ignored, n_failed))
         print('Elapsed: %.3fs' % elapsed)
         sys.exit(1)
 
@@ -567,7 +581,7 @@ def main():
     try:
         # navigate to script directory
         current_dir = os.getcwd()
-        test_dir = os.path.dirname(sys.argv[0])
+        test_dir = os.path.dirname(__file__)
         os.chdir(test_dir)
 
         if args.exclude:

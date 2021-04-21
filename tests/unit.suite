@@ -764,7 +764,8 @@ abbb
 ---
 regexp: ** ERE (multiple quantifier)
 ---
-#r\ns/ab**/cd/
+#r
+s/ab**/cd/
 ---
 abbb
 ---
@@ -772,7 +773,7 @@ abbb
 ---
 
 ---
-regexp: *? BRE (multiple quantifier)
+regexp: *\? BRE (multiple quantifier)
 ---
 s/ab*\?/cd/
 ---
@@ -784,7 +785,8 @@ abb
 ---
 regexp: *? ERE (multiple quantifier)
 ---
-#r\ns/ab*?/cd/
+#r
+s/ab*?/cd/
 ---
 abbb
 ---
@@ -1484,20 +1486,20 @@ y: slashes
 ---
 #n
 h
-g; y/abcd/xyzt/; p
-g; y,abcd,xyzt,; p
+g; y/ABCD/xyzt/; p
+g; y,ABCD,xyzt,; p
 g; y/\\/X/; p
 g; y/\//X/; p
 g; y,\,,V,; p
-g; y/\a\b\c\d/xyzt/; p
+g; y/\A\B\C\D/xyzt/; p
 ---
-a/b\c,d
+A/B\C,D
 ---
 x/y\z,t
 x/y\z,t
-a/bXc,d
-aXb\c,d
-a/b\cVd
+A/BXC,D
+AXB\C,D
+A/B\CVD
 x/y\z,t
 ---
 
@@ -1539,7 +1541,7 @@ abCd
 ---
 
 ---
-y: exceptions
+y: exceptions - not delimited
 ---
 y/ab/ab
 ---
@@ -1549,7 +1551,7 @@ abc
 ---
 
 ---
-y: exceptions 2
+y: exceptions - unequal length
 ---
 y/ab/abc/
 ---
@@ -1559,7 +1561,7 @@ abc
 ---
 
 ---
-y: exceptions 3
+y: exceptions - additional text
 ---
 y/ab/ba/ and more
 ---
@@ -1716,3 +1718,47 @@ N; P;
 3
 ---
 
+---
+v command earlier version
+---
+v 4.5.3
+---
+test data
+---
+test data
+---
+
+---
+v command later version
+---
+v 5.0.3
+---
+test data
+---
+???
+---
+
+---
+v command with syntax error
+---
+v 4.lo-9
+---
+test data
+---
+???
+---
+
+---
+F command
+---
+2F
+---
+1
+2
+3
+---
+1
+test-tmp-script.inp
+2
+3
+---

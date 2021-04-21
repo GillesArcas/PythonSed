@@ -1,0 +1,14 @@
+# compiled Python files
+*.pyc
+__pycache__
+
+# generated test files
+test-tmp-*
+tests/script.good
+tests/script.inp
+tests/script.sed
+
+# Metafiles for Eclipse
+.project
+.pydevproject
+.settings/

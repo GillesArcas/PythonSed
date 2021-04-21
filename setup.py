@@ -30,10 +30,10 @@ def find_version(*file_paths):
 if __name__ == "__main__":
 
     try:
-        shutil.copytree('tests', r'PythonSed\tests')
+        shutil.copytree('tests', r'PythonSed/tests')
 
         test_files = []
-        for path, subdirs, files in os.walk(r'PythonSed\tests'):
+        for path, subdirs, files in os.walk(r'PythonSed/tests'):
             for name in files:
                 test_files.append(os.path.join(path, name))
 
@@ -55,4 +55,4 @@ if __name__ == "__main__":
         )
 
     finally:
-        shutil.rmtree(r'PythonSed\tests')
+        shutil.rmtree(r'PythonSed/tests')

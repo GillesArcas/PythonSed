@@ -1,0 +1,7 @@
+<HTML><HEAD></HEAD><BODY>
+foo1 <a href="http://link.org">[1] Click here</a> foo2
+<p>some more text</p>
+<h1>who knows</h1>
+Here comes another link <a href="http://something.com">[2] Click here</a> and there it goes
+<hr>[1] http://link.org<br>
+[2] http://something.com<br></BODY></HTML>
