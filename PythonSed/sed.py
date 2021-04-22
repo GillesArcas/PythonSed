@@ -69,11 +69,16 @@ import traceback
 import re
 import sys
 import os
-import io
 import ast
 import argparse
 import string
 import webbrowser
+
+if sys.version_info[0]==2:
+    PY2 = True
+else:
+    PY2 = False 
+    from io import open as open
 
 class ScriptLine (object):
     debug = 0
@@ -324,7 +329,8 @@ class Script(object):
         self.file_idx += 1
         lineno = 0
         try:
-            with io.open(filename, 'r',encoding=encoding) as f:
+            args = {} if PY2 else { 'encoding': encoding }
+            with open(filename, 'rt', **args) as f:
                 for line in f.readlines():
                     lineno += 1
                     self._add(ScriptLine(
@@ -1073,7 +1079,7 @@ class Sed(object):
         
         x = ''
         for c in strng:
-            if chr(32) <= c < chr(128):
+            if 32 <= ord(c) <= 127:
                 if c=='\\':
                     x += c
                 x += c
@@ -1082,7 +1088,7 @@ class Sed(object):
             elif c=='\t':
                 x += '\\t'
             else:
-                x += '\\'+('00'+oct(ord(c))[2:])[-3:]
+                x += '\\'+('00'+oct(ord(c))[1:])[-3:]
                 
         width = line_length-1
         while len(x)>width:
@@ -1132,7 +1138,7 @@ class Sed(object):
     def flush_append_buffer(self):
         for line in self.append_buffer:
             self.printline('appnd',line)
-        self.append_buffer.clear()
+        self.append_buffer = []
 
     def getReader(self,
                   source_files,
@@ -1299,7 +1305,8 @@ class Writer (object):
             if type(output)==str:
                 self.current_filename = output
                 try:
-                    self.current_output = io.open(output, 'wt', encoding=self.encoding)
+                    args = {} if PY2 else { 'encoding': self.encoding }
+                    self.current_output = open(output, 'wt', **args)
                     self.current_output_opened = True
                 except Exception as e:
                     raise SedException('',"Can not open output file {file}: {err}",file=output,err=str(e))
@@ -1312,27 +1319,28 @@ class Writer (object):
     def printline(self, line):
         line += '\n'
         if self.current_output:
-            print(line,end='',file=self.current_output)
+            self.current_output.write(line)
         self.output_lines.append(line)
             
     def add_write_file(self,filename):
         if self.open_files.get(filename) is None:
-            self.open_files[filename] = io.open(filename, 'wt', encoding=self.encoding)
+            args = {} if PY2 else { 'encoding':self.encoding }
+            self.open_files[filename] = open(filename, 'wt', **args)
         
     def write_to_file(self,filename,line):
-        file = self.open_files.get(filename)
-        if file is None:
+        open_file = self.open_files.get(filename)
+        if open_file is None:
             if filename=='/dev/stdout' or filename=='-':
-                file = sys.stdout
+                open_file = sys.stdout
             elif filename=='/dev/stderr':
-                file = sys.stderr
+                open_file = sys.stderr
             else:
                 raise SedException('','File {file} not opened for writing.',file=filename)
         if not line.endswith('\n'):
             line += '\n'
         if self.debug>0:
             print('writing to '+filename+': '+line,end='',file=sys.stderr)
-        print(line,end='',file=file)
+        open_file.write(line)
         
     def open_inplace(self,file_name):
         self.current_filename = os.path.abspath(file_name)
@@ -1374,9 +1382,9 @@ class Writer (object):
                     self.current_output.close()
                 except:
                     pass
-        for file in self.open_files.values():
+        for open_file in self.open_files.values():
             try:
-                file.close()
+                open_file.close()
             except:
                 pass
         return self.output_lines
@@ -1423,7 +1431,8 @@ class ReaderUnbufOne(object):
             self.input_stream_opened = False
         else:
             try:
-                self.input_stream = io.open(source_file, encoding=self.encoding)
+                args = {} if PY2 else { 'encoding': self.encoding }
+                self.input_stream = open(source_file, mode='rt', **args)
                 self.source_file_name = source_file
                 self.input_stream_opened = True
             except IOError as e:
@@ -1459,11 +1468,11 @@ class ReaderUnbufOne(object):
         
     def readline_from_file(self,filename):
         if filename in self.open_files:
-            file = self.open_files.get(filename)
-            if file is not None:
-                line = file.readline()
+            open_file = self.open_files.get(filename)
+            if open_file is not None:
+                line = open_file.readline()
                 if len(line)==0:
-                    file.close()
+                    open_file.close()
                     self.open_files[filename] = None
                     return ''
                 return line
@@ -1472,14 +1481,15 @@ class ReaderUnbufOne(object):
         elif filename=='/dev/stdin' or filename=='-':
             return sys.stdin.readline()
         else:
-            file = None
+            open_file = None
             try:
-                file = io.open(filename,encoding=self.encoding)
-                self.open_files[filename] = file
-                return file.readline()
+                args = {} if PY2 else { 'encoding': self.encoding }
+                open_file = open(filename,mode='rt',**args)
+                self.open_files[filename] = open_file
+                return open_file.readline()
             except:
-                if file:
-                    file.close()
+                if open_file:
+                    open_file.close()
                 self.open_files[filename] = None
                 return ''
             
@@ -1489,10 +1499,10 @@ class ReaderUnbufOne(object):
                 self.input_stream.close()
             except:
                 pass
-        for file in self.open_files.values():
-            if file:
+        for open_file in self.open_files.values():
+            if open_file:
                 try:
-                    file.close()
+                    open_file.close()
                 except:
                     pass
         
@@ -1510,10 +1520,10 @@ class ReaderUnbufSepInplace(ReaderUnbufSep):
             files = [ source_files ]
         if len(files)==0:
             raise SedException('','Can not use stdin as input for inplace-editing.')
-        for file in files:
-            if file is None or file=='-':
+        for open_file in files:
+            if open_file is None or open_file=='-':
                 raise SedException('','Can not use stdin as input for inplace-editing.')
-            elif type(file)!=str:
+            elif type(open_file)!=str:
                 raise SedException('','Can not use streams or files as input for inplace-editing.')
 
         self.writer = writer
@@ -1564,10 +1574,10 @@ class ReaderBufSepInplace(ReaderBufSep):
             files = [ source_files ]
         if len(files)==0:
             raise SedException('','Can not use stdin as input for inplace-editing.')
-        for file in files:
-            if file is None or file=='-':
+        for filename in files:
+            if filename is None or filename=='-':
                 raise SedException('','Can not use stdin as input for inplace-editing.')
-            elif type(file)!=str:
+            elif type(filename)!=str:
                 raise SedException('','Can not use streams or files as input for inplace-editing.')
         self.writer = writer
         super(ReaderBufSepInplace,self). __init__(source_files,encoding)
@@ -1879,7 +1889,8 @@ class Command_r(Command):
     def apply(self, sed):
         # https://groups.yahoo.com/neo/groups/sed-users/conversations/topics/9096
         try:
-            with io.open(self.filename, encoding=sed.encoding) as f:
+            args = {} if PY2 else { 'encoding': sed.encoding }
+            with open(self.filename, 'rt', **args) as f:
                 for line in f:
                     sed.append_buffer.append(line[:-1] if line.endswith('\n') else line)
         except:
@@ -1988,7 +1999,7 @@ class Command_s(Command):
 
         return "{regex}{repl}{delim}{flags}".format(
             delim=self.delim,
-            regex=str(self.regexp),
+            regex=self.regexp.toString(),
             repl=self.repl.string,
             flags=flags)
 
@@ -2033,7 +2044,7 @@ class Command_T(Command_b):
             return None
 
 class Command_v(Command):
-    def apply(self, sed):
+    def apply(self, sed): # @UnusedVariable
         pass
         return self.next
     
@@ -2316,6 +2327,9 @@ class SedRegexp(object):
         self.compiled = None
         
     def __str__(self):
+        return self.toString()
+    
+    def toString(self):
         result = '' if self.delim=='/' else '\\'
         result += self.delim+self.pattern+self.delim
         if self.address:

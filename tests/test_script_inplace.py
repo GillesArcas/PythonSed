@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 """
 Test input and output arguments of sed.apply (filenames, files or streams)
 """
@@ -39,7 +41,7 @@ def remove_file(filename):
 def main():
     exit_code = test_inplace(SED_SCRIPT,'.bkup',0)
     if exit_code==0:
-        exit_code += test_inplace(SED_SCRIPT2,'*.bkup',2)
+        exit_code += test_inplace(SED_SCRIPT2,'*.bkup',0)
 
     if exit_code==0:
         # ok

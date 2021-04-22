@@ -1,12 +1,19 @@
+from __future__ import print_function
+
 """
 Test input and output arguments of sed.apply (filenames, files or streams)
 """
 
 import os
 import sys
-import io
 from PythonSed import Sed
 
+if sys.version_info[0]==2:
+    # python2
+    from StringIO import StringIO
+else:
+    # python3
+    from io import StringIO
 
 INPUT_STRING = 'In Xanadu did Kubla Khan\n'
 OUTPUT_STRING = 'In XANadu did Kubla KhAN\n'
@@ -49,15 +56,24 @@ def main():
             exit_code += 4
     
         # input and output arguments are streams
-        with io.StringIO(INPUT_STRING) as stream_in, io.StringIO() as stream_out:
+        stream_in = None
+        stream_out = None
+        try:
+            stream_in = StringIO(INPUT_STRING)
+            stream_out = StringIO()
             sed.apply(stream_in, stream_out)
             s = stream_out.getvalue()
-        if s != OUTPUT_STRING:
-            print('Input and output arguments are stream objects:')
-            print('|' + s + '|')
-            print('|' + OUTPUT_STRING + '|')
-            exit_code += 8
-    
+            if s != OUTPUT_STRING:
+                print('Input and output arguments are stream objects:')
+                print('|' + s + '|')
+                print('|' + OUTPUT_STRING + '|')
+                exit_code += 8
+        finally:
+            if stream_in is not None:
+                stream_in.close()
+            if stream_out is not None:
+                stream_out.close()
+                
     finally:
         if os.path.exists(INPUT_FILENAME):
             os.remove(INPUT_FILENAME)
