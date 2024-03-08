@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+name: Build status
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       run: |
         coverage run tests/test_script_io.py
         coverage run -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
- 
+
     - name: Coveralls
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

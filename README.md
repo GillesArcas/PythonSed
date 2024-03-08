@@ -1,7 +1,7 @@
 # PythonSed
 A full and working Python implementation of sed
 
-# [![Build Status](https://travis-ci.com/GillesArcas/PythonSed.svg?branch=master)](https://travis-ci.com/GillesArcas/PythonSed) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
+# ![Build Status](https://github.com/GillesArcas/PythonSed/actions/workflows/python-app.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
 ### Contents
 
 * * *
@@ -67,7 +67,7 @@ To install, just clone or download the repository zip file and run the setup in 
 ```
 pip install .
 ```
-This installs a command line utility named `pythonsed` and a package named `PythonSed`. 
+This installs a command line utility named `pythonsed` and a package named `PythonSed`.
 
 ***
 
