@@ -27,8 +27,11 @@ jobs:
         pip install .
         pip install coveralls
     - name: Test
-      env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         coverage run tests/test_script_io.py
         coverage run -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
-        coveralls
+    # Save coverage report in Coveralls
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
