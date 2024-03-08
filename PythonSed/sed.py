@@ -208,8 +208,8 @@ class Sed:
             if prev_command.function != 'D':
                 self.PS = self.readline()
 
-            if type(output) == str:
-                self.output.close()
+        if type(output) == str:
+            self.output.close()
 
         return self.output_lines
 

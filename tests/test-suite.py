@@ -567,7 +567,7 @@ def main():
     try:
         # navigate to script directory
         current_dir = os.getcwd()
-        test_dir = os.path.dirname(sys.argv[0])
+        test_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
         os.chdir(test_dir)
 
         if args.exclude:

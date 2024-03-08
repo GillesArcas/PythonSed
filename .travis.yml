@@ -3,19 +3,17 @@
 language: python
 
 python:
-  - "2.7"
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
+  - "3.9"
+  - "3.10"
+  - "3.11"
 
 install:
   - pip install .
   - pip install coveralls
 
 script:
-  - if [ $TRAVIS_PYTHON_VERSION != '2.7' ]; then coverage run tests/test_script_io.py; fi
-  - coverage run tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
+  - coverage run tests/test_script_io.py
+  - coverage run -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
 
 after_success:
   - coveralls
