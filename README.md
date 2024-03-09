@@ -1,7 +1,7 @@
 # PythonSed
 A full and working Python implementation of sed
 
-# ![Build Status](https://github.com/GillesArcas/PythonSed/actions/workflows/python-app.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
+[![Build Status](https://github.com/GillesArcas/PythonSed/actions/workflows/python-app.yml/badge.svg)](https://github.com/GillesArcas/PythonSed/actions) [![Coverage Status](https://coveralls.io/repos/github/GillesArcas/PythonSed/badge.svg?branch=master)](https://coveralls.io/github/GillesArcas/PythonSed?branch=master)
 ### Contents
 
 * * *
