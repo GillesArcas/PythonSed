@@ -1,0 +1,17 @@
+# coverage configuration file
+
+[run]
+#omit =
+#    # remove site.py from coveralls reports
+#    */lib/*
+
+[paths]
+source = */site-packages/PythonSed/
+
+[report]
+# omit =
+
+include = */site-packages/PythonSed/sed.py
+
+exclude_lines =
+    not used
