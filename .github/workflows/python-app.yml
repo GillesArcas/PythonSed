@@ -28,8 +28,8 @@ jobs:
         pip install coveralls
     - name: Test
       run: |
-        coverage run tests/test_script_io.py
-        coverage run -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
+        coverage run --include=PythonSed/sed.py tests/test_script_io.py
+        coverage run --include=PythonSed/sed.py -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
         # coverage report
 
     - name: Coveralls
