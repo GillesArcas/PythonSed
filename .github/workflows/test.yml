@@ -31,8 +31,8 @@ jobs:
         # coverage run --include PythonSed/sed.py tests/test_script_io.py
         coverage run tests/test_script_io.py
         # coverage run --include PythonSed  -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
-        coverage report
         ls /opt/hostedtoolcache/Python/3.10.13/x64/lib
+        coverage report
 
     - name: Coveralls
       env:
