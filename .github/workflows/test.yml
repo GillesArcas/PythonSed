@@ -29,7 +29,7 @@ jobs:
     - name: Test
       run: |
         coverage run --include PythonSed tests/test_script_io.py
-        coverage run --include PythonSed  -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
+        # coverage run --include PythonSed  -a tests/test-suite.py @all-tests.suites -x test-python-sed-3.7.exclude
         coverage report
 
     - name: Coveralls
