@@ -6,12 +6,12 @@
 #    */lib/*
 
 [paths]
-source = */site-packages/PythonSed/
+source = /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/PythonSed/
 
 [report]
 # omit =
 
-include = */site-packages/PythonSed/sed.py
+include = /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/PythonSed/sed.py
 
 exclude_lines =
     not used
