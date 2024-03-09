@@ -26,10 +26,6 @@ A full and working Python implementation of sed
 
 * * *
 
-#### Important note
-
-`pythonsed` has been rewrited and completed by [Frank Schäckermann](https://github.com/fschaeck). This new version has its own [repository](https://github.com/fschaeck/PythonSed) and is very close to be fully compatible with GNU sed 4.8. Any comment or pull request should be addressed to Frank.
-* * *
 #### Description
 
 `pythonsed` is a full and working Python implementation of sed. Its reference is GNU sed 4.2 of which it implements almost all commands and features. It may be used as a command line utility or it can be used as a module to bring sed functionality to Python scripts.
@@ -440,6 +436,14 @@ Test conditions:
 
 *   Only script files are used (scripts from folders testsuiteN). This is to avoid measuring the time to extract scripts, inputs and results from .suite files.
 *   The given values are averaged from three consecutive test runs.
+
+
+* * *
+
+### Alternative
+
+* * *
+`pythonsed` has been forked and completed by [Frank Schäckermann](https://github.com/fschaeck). This new version has its own [repository](https://github.com/fschaeck/PythonSed) and is very close to be fully compatible with GNU sed 4.8.
 
 * * *
 
