@@ -28,9 +28,9 @@ jobs:
         pip install coveralls
     - name: Test
       run: |
-        sed --version
-        tests/test-suite.py @timing-tests.suites -x test-python-sed-3.7.exclude
-        tests/test-suite.py @timing-tests.suites -x test-python-sed-3.7.exclude -b sed
+        # sed --version
+        python tests/test-suite.py @timing-tests.suites -x test-python-sed-3.7.exclude
+        python tests/test-suite.py @timing-tests.suites -x test-python-sed-3.7.exclude -b sed
 
     - name: Coveralls
       env:
