@@ -35,14 +35,11 @@ A complete set of tests is available as well as a testing utility. These tests i
 #### Compatibility
 
 
-| Version                    |  Status                                         |
-| -------------------------- | ------------------------------------------------------------ |
-| Python 3.7                 | Fully compatible except s///g with zero length matches. See this [question at stackoverflow](https://stackoverflow.com/questions/53642571/retrieving-python-3-6-handling-of-re-sub-with-zero-length-matches-in-python-3) |
-| Python 3                   | Fully compatible                                             |
-| Python 2.7.4 and above     | Fully compatible                                             |
-| Python 2.7 to Python 2.7.3 | Fully compatible except regexps of the form ((.\*)\*). This causes one of the script from Chang suite to fail. |
-| Python 2.6                 | Fully compatible except regexps of the form ((.\*)\*). argparse module must be installed. |
-| Python 2.5 and below       | Not tested                                                   |
+| Version      | Status                                                       |
+| ------- | ----------------- |
+| Python ≥ 3.7 | Fully compatible except s///g with zero length matches. See this [question at stackoverflow](https://stackoverflow.com/questions/53642571/retrieving-python-3-6-handling-of-re-sub-with-zero-length-matches-in-python-3) |
+| Python ≤ 3.6 | Fully compatible                                             |
+| Python 2     | No more maintained                                           |
 
 Compatibility status applies also to the testing utility `test-suite.py`.
 
@@ -424,17 +421,16 @@ Some other files may be used when using reading or writing commands in scripts. 
 
 * * *
 
-A python implementation of sed has to face legitimate questions about timing. Fortunately, results are not bad. Unfortunately, they seem correlated with version number. Timings are given in seconds.
+A python implementation of sed has to face legitimate questions about timing. Fortunately, results are not bad. Timings are given in seconds.
 
-| Platform                                     | GNU sed 4.2.1 | sed.py python 2.6 | sed.py python 2.7 | sed.py python 3.4 |
-| -------------------------------------------- | ------------- | ----------------- | ----------------- | ----------------- |
-| Windows7, Intel Xeon 3.2 GHz, 6 Gb RAM       | 19.4          | 19.1              | 22.6              | 26.9              |
-| Windows XP, Intel Pentium4 3.2 GHz, 4 Gb RAM | 47.5          | 50.7              | 56.5              | 71.2              |
-| Linux, Intel Pentium4 3.2 GHz, 4 Gb RAM      | \-            | \-                | 51.0              | \-                |
+| Platform                                     | GNU sed 4.8 | sed.py python 3.11 |      |
+| -------------------------------------------- | ----------- | ------------------ | ---- |
+| Windows10, Intel 7-8550U CPU .80GHz 8 Gb RAM | 27          | 21.7               |      |
+| Linux                                        |             |                    |      |
 
 Test conditions:
 
-*   Only script files are used (scripts from folders testsuiteN). This is to avoid measuring the time to extract scripts, inputs and results from .suite files.
+*   Only script files are used (scripts from folders testsuiteN, 150 tests). This is to avoid measuring the time to extract scripts, inputs and results from .suite files.
 *   The given values are averaged from three consecutive test runs.
 
 
